@@ -5,9 +5,11 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DeliveryController;
+use App\Http\Controllers\Api\DeliveryPackageShipmentController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderRefundController;
 use App\Http\Controllers\Api\PasswordController;
+use App\Http\Controllers\Api\PackageShipmentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RatingController;
@@ -30,7 +32,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes with rate limiting
 Route::post('/auth/register', [AuthController::class, 'register'])
-    ->middleware('throttle:5,1')
+    // ->middleware('throttle:5,1')
     ->name('api.register');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('api.login'); // Rate limiting handled in LoginRequest
 Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail'])
@@ -144,6 +146,23 @@ Route::group(['middleware' => 'locale'], function () {
             
          Route::get('refund-requests', [OrderRefundController::class, 'index'])->name('api.refund-requests.index');
 
+        // package shipments (user to user)
+        Route::get('package-sizes', [PackageShipmentController::class, 'packageSizes'])->name('api.package-sizes.index');
+        Route::post('package-shipments/calculate-price', [PackageShipmentController::class, 'calculatePrice'])
+            ->middleware('throttle:30,1')
+            ->name('api.package-shipments.calculate-price');
+        Route::post('package-shipments', [PackageShipmentController::class, 'store'])
+            ->middleware('throttle:10,1')
+            ->name('api.package-shipments.store');
+        Route::get('package-shipments', [PackageShipmentController::class, 'index'])->name('api.package-shipments.index');
+        Route::get('package-shipments/{id}', [PackageShipmentController::class, 'show'])->name('api.package-shipments.show');
+        Route::post('package-shipments/{packageShipment}/pay', [PackageShipmentController::class, 'pay'])
+            ->middleware('throttle:10,1')
+            ->name('api.package-shipments.pay');
+        Route::post('package-shipments/{packageShipment}/cancel', [PackageShipmentController::class, 'cancel'])
+            ->middleware('throttle:10,1')
+            ->name('api.package-shipments.cancel');
+
         // transactions (user)
         Route::get('wallet/history', [\App\Http\Controllers\Api\TransactionController::class, 'walletHistory'])->name('api.wallet.history');
         Route::get('points/history', [\App\Http\Controllers\Api\TransactionController::class, 'pointHistory'])->name('api.points.history');
@@ -161,6 +180,15 @@ Route::group(['middleware' => 'locale'], function () {
             Route::post('assignments/{assignment}/in-transit', [DeliveryController::class, 'inTransit'])->name('api.delivery.in-transit');
             Route::post('assignments/{assignment}/delivered', [DeliveryController::class, 'delivered'])->name('api.delivery.delivered');
             Route::put('assignments/{assignment}/distance', [DeliveryController::class, 'updateDistance'])->name('api.delivery.update-distance');
+
+            // package shipments
+            Route::get('package-shipments/available', [DeliveryPackageShipmentController::class, 'available'])->name('api.delivery.package-shipments.available');
+            Route::get('package-shipments/assignments', [DeliveryPackageShipmentController::class, 'assignments'])->name('api.delivery.package-shipments.assignments');
+            Route::get('package-shipments/assignments/{assignment}', [DeliveryPackageShipmentController::class, 'showAssignment'])->name('api.delivery.package-shipments.assignments.show');
+            Route::post('package-shipments/{packageShipment}/assign', [DeliveryPackageShipmentController::class, 'assign'])->name('api.delivery.package-shipments.assign');
+            Route::post('package-shipments/assignments/{assignment}/start-picking-up', [DeliveryPackageShipmentController::class, 'startPickingUp'])->name('api.delivery.package-shipments.start-picking-up');
+            Route::post('package-shipments/assignments/{assignment}/in-transit', [DeliveryPackageShipmentController::class, 'inTransit'])->name('api.delivery.package-shipments.in-transit');
+            Route::post('package-shipments/assignments/{assignment}/delivered', [DeliveryPackageShipmentController::class, 'delivered'])->name('api.delivery.package-shipments.delivered');
         });
         
        
