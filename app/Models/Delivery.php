@@ -61,6 +61,11 @@ class Delivery extends Model
         return $this->hasMany(DeliveryAssignment::class);
     }
 
+    public function packageShipmentAssignments(): HasMany
+    {
+        return $this->hasMany(PackageShipmentAssignment::class);
+    }
+
     public function walletTransactions(): HasMany
     {
         return $this->hasMany(DeliveryWalletTransaction::class)->latest();

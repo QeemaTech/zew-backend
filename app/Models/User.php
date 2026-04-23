@@ -188,4 +188,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DeliveryRequest::class);
     }
+
+    public function sentPackageShipments()
+    {
+        return $this->hasMany(PackageShipment::class, 'sender_id');
+    }
 }

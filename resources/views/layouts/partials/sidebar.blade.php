@@ -143,6 +143,18 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.package-shipments*') ? 'active' : '' }}" href="{{ route('admin.package-shipments.index') }}">
+                                <i class="bi bi-send-check"></i>
+                                <span>{{ __('Package Shipments') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.package-sizes*') ? 'active' : '' }}" href="{{ route('admin.package-sizes.index') }}">
+                                <i class="bi bi-bounding-box-circles"></i>
+                                <span>{{ __('Package Sizes') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.order-refund-requests*') ? 'active' : '' }}" href="{{ route('admin.order-refund-requests.index') }}">
                                 <i class="bi bi-arrow-counterclockwise"></i>
                                 <span>{{ __('Order Refund Requests') }}</span>

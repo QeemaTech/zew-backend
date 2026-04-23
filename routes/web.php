@@ -150,6 +150,11 @@ Route::group(['middleware' => 'locale'], function () {
             Route::get('orders/{order}/invoice', [\App\Http\Controllers\Admin\OrderController::class, 'invoice'])->name('orders.invoice');
             Route::post('orders/{order}/assign-delivery', [\App\Http\Controllers\Admin\OrderController::class, 'assignDelivery'])->name('orders.assign-delivery');
 
+            // Package delivery module
+            Route::resource('package-sizes', \App\Http\Controllers\Admin\PackageSizeController::class);
+            Route::resource('package-shipments', \App\Http\Controllers\Admin\PackageShipmentController::class)->only(['index', 'show']);
+            Route::get('package-shipments/{packageShipment}/invoice', [\App\Http\Controllers\Admin\PackageShipmentController::class, 'invoice'])->name('package-shipments.invoice');
+
             // Reports & Analytics
             Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
             Route::get('reports/earnings', [\App\Http\Controllers\Admin\ReportController::class, 'earnings'])->name('reports.earnings');
