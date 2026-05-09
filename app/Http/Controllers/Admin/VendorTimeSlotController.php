@@ -22,7 +22,7 @@ class VendorTimeSlotController extends Controller
             'day_of_week' => $request->integer('day_of_week'),
             'opens_at' => $request->input('opens_at'),
             'closes_at' => $request->input('closes_at'),
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active'),
         ]);
 
         return redirect()->route('admin.vendors.edit', $vendor)
@@ -39,7 +39,7 @@ class VendorTimeSlotController extends Controller
             'day_of_week' => $request->integer('day_of_week'),
             'opens_at' => $request->input('opens_at'),
             'closes_at' => $request->input('closes_at'),
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active'),
         ]);
 
         return redirect()->route('admin.vendors.edit', $vendor)

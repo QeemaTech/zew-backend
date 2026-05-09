@@ -23,6 +23,18 @@
             </div>
         @endif
 
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-circle me-2"></i>{{ __('Please fix the following errors:') }}
+                <ul class="mb-0 mt-2">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
@@ -106,44 +118,49 @@
                                     <tbody>
                                         @foreach($vendor->timeSlots as $slot)
                                             <tr>
-                                                <form action="{{ route('vendor.time-slots.update', $slot) }}" method="POST" class="align-middle">
-                                                    @csrf
-                                                    @method('PUT')
                                                     <td style="width: 140px;">
-                                                        <select name="day_of_week" class="form-select form-select-sm">
+                                                        <select data-slot-field="day_of_week" class="form-select form-select-sm">
                                                             @foreach($days as $index => $label)
-                                                                <option value="{{ $index }}" {{ $slot->day_of_week === $index ? 'selected' : '' }}>
+                                                                <option value="{{ $index }}" {{ (int) $slot->day_of_week === $index ? 'selected' : '' }}>
                                                                     {{ $label }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </td>
                                                     <td style="width: 120px;">
-                                                        <input type="time" name="opens_at" class="form-control form-control-sm" value="{{ \Illuminate\Support\Str::of($slot->opens_at)->substr(0,5) }}">
+                                                        <input type="time" data-slot-field="opens_at" class="form-control form-control-sm" value="{{ \Illuminate\Support\Str::of($slot->opens_at)->substr(0,5) }}">
                                                     </td>
                                                     <td style="width: 120px;">
-                                                        <input type="time" name="closes_at" class="form-control form-control-sm" value="{{ \Illuminate\Support\Str::of($slot->closes_at)->substr(0,5) }}">
+                                                        <input type="time" data-slot-field="closes_at" class="form-control form-control-sm" value="{{ \Illuminate\Support\Str::of($slot->closes_at)->substr(0,5) }}">
                                                     </td>
                                                     <td style="width: 130px;">
                                                         <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox" name="is_active" value="1" {{ $slot->is_active ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="checkbox" data-slot-field="is_active" value="1" {{ $slot->is_active ? 'checked' : '' }}>
                                                             <span class="ms-2 small">{{ $slot->is_active ? __('Active') : __('Inactive') }}</span>
                                                         </div>
                                                     </td>
                                                     <td class="text-end" style="width: 190px;">
-                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                        <form id="update-slot-{{ $slot->id }}" action="{{ route('vendor.time-slots.update', $slot) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="day_of_week" value="{{ (int) $slot->day_of_week }}">
+                                                            <input type="hidden" name="opens_at" value="{{ \Illuminate\Support\Str::of($slot->opens_at)->substr(0,5) }}">
+                                                            <input type="hidden" name="closes_at" value="{{ \Illuminate\Support\Str::of($slot->closes_at)->substr(0,5) }}">
+                                                            <input type="hidden" name="is_active" value="{{ $slot->is_active ? 1 : 0 }}">
+                                                        </form>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="submitSlotUpdate(this, 'update-slot-{{ $slot->id }}')">
                                                             <i class="bi bi-save me-1"></i>{{ __('Save') }}
                                                         </button>
-                                                </form>
-                                                <form action="{{ route('vendor.time-slots.destroy', $slot) }}" method="POST" class="d-inline"
-                                                      onsubmit="return confirm('{{ __('Delete this time slot?') }}');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger ms-1">
-                                                        <i class="bi bi-trash me-1"></i>{{ __('Delete') }}
-                                                    </button>
-                                                </form>
-                                                </td>
+                                                        <form action="{{ route('vendor.time-slots.destroy', $slot) }}" method="POST" class="d-inline"
+                                                              onsubmit="return confirm('{{ __('Delete this time slot?') }}');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger ms-1">
+                                                                <i class="bi bi-trash me-1"></i>{{ __('Delete') }}
+                                                            </button>
+                                                        </form>
+                                                    </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -192,3 +209,25 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+function submitSlotUpdate(button, formId) {
+    const row = button.closest('tr');
+    const form = document.getElementById(formId);
+    if (!row || !form) return;
+
+    const day = row.querySelector('[data-slot-field="day_of_week"]');
+    const opens = row.querySelector('[data-slot-field="opens_at"]');
+    const closes = row.querySelector('[data-slot-field="closes_at"]');
+    const active = row.querySelector('[data-slot-field="is_active"]');
+
+    form.querySelector('input[name="day_of_week"]').value = day ? day.value : '';
+    form.querySelector('input[name="opens_at"]').value = opens ? opens.value : '';
+    form.querySelector('input[name="closes_at"]').value = closes ? closes.value : '';
+    form.querySelector('input[name="is_active"]').value = active && active.checked ? '1' : '0';
+
+    form.submit();
+}
+</script>
+@endpush

@@ -57,7 +57,13 @@ class OrderRepository
         }
 
         if (isset($filters['status']) && $filters['status'] !== '') {
-            $query->where('status', $filters['status']);
+            $statusFilter = (string) $filters['status'];
+            if (str_contains($statusFilter, ',')) {
+                $statuses = array_values(array_filter(array_map('trim', explode(',', $statusFilter))));
+                $query->whereIn('status', $statuses);
+            } else {
+                $query->where('status', $statusFilter);
+            }
         }
 
         if (isset($filters['payment_status']) && $filters['payment_status'] !== '') {

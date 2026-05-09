@@ -10,6 +10,7 @@ use App\Models\VendorTimeSlot;
 use App\Services\VendorTimeSlotService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class VendorTimeSlotController extends Controller
 {
@@ -24,6 +25,11 @@ class VendorTimeSlotController extends Controller
 
     public function store(StoreRequest $request): RedirectResponse
     {
+        Log::info('Vendor dashboard time-slot store payload', [
+            'user_id' => Auth::id(),
+            'payload' => $request->only(['day_of_week', 'opens_at', 'closes_at', 'is_active']),
+        ]);
+
         $vendor = $this->getVendor();
         if (! $vendor) {
             abort(404, __('Vendor account not found.'));
@@ -33,7 +39,7 @@ class VendorTimeSlotController extends Controller
             'day_of_week' => $request->integer('day_of_week'),
             'opens_at' => $request->input('opens_at'),
             'closes_at' => $request->input('closes_at'),
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active'),
         ]);
 
         return redirect()->route('vendor.settings.index')
@@ -42,6 +48,12 @@ class VendorTimeSlotController extends Controller
 
     public function update(UpdateRequest $request, VendorTimeSlot $timeSlot): RedirectResponse
     {
+        Log::info('Vendor dashboard time-slot update payload', [
+            'user_id' => Auth::id(),
+            'time_slot_id' => $timeSlot->id,
+            'payload' => $request->only(['day_of_week', 'opens_at', 'closes_at', 'is_active']),
+        ]);
+
         $vendor = $this->getVendor();
         if (! $vendor) {
             abort(404, __('Vendor account not found.'));
@@ -55,7 +67,12 @@ class VendorTimeSlotController extends Controller
             'day_of_week' => $request->integer('day_of_week'),
             'opens_at' => $request->input('opens_at'),
             'closes_at' => $request->input('closes_at'),
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active'),
+        ]);
+
+        Log::info('Vendor dashboard time-slot updated row', [
+            'time_slot_id' => $timeSlot->id,
+            'fresh' => $timeSlot->fresh()?->only(['id', 'day_of_week', 'opens_at', 'closes_at', 'is_active']),
         ]);
 
         return redirect()->route('vendor.settings.index')

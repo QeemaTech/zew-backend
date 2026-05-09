@@ -4,6 +4,12 @@ use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\Vendor\BranchController as VendorBranchController;
+use App\Http\Controllers\Api\Vendor\OrderController as VendorOrderController;
+use App\Http\Controllers\Api\Vendor\ProductController as VendorProductController;
+use App\Http\Controllers\Api\Vendor\VendorRatingController as ApiVendorRatingController;
+use App\Http\Controllers\Api\Vendor\VendorTimeSlotController as ApiVendorTimeSlotController;
+use App\Http\Controllers\Api\Vendor\WalletController as ApiVendorWalletController;
 use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\DeliveryPackageShipmentController;
 use App\Http\Controllers\Api\OrderController;
@@ -29,6 +35,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+// vendor register
+Route::post('auth/vendor/register', [AuthController::class, 'vedorRegister'])->name('api.vendor.register');
 
 // Public routes with rate limiting
 Route::post('/auth/register', [AuthController::class, 'register'])
@@ -143,8 +151,8 @@ Route::group(['middleware' => 'locale'], function () {
         Route::post('orders/{order}/refund-request', [OrderRefundController::class, 'store'])
             ->middleware('throttle:5,1')
             ->name('api.orders.refund-request');
-            
-         Route::get('refund-requests', [OrderRefundController::class, 'index'])->name('api.refund-requests.index');
+
+        Route::get('refund-requests', [OrderRefundController::class, 'index'])->name('api.refund-requests.index');
 
         // package shipments (user to user)
         Route::get('package-sizes', [PackageShipmentController::class, 'packageSizes'])->name('api.package-sizes.index');
@@ -190,8 +198,8 @@ Route::group(['middleware' => 'locale'], function () {
             Route::post('package-shipments/assignments/{assignment}/in-transit', [DeliveryPackageShipmentController::class, 'inTransit'])->name('api.delivery.package-shipments.in-transit');
             Route::post('package-shipments/assignments/{assignment}/delivered', [DeliveryPackageShipmentController::class, 'delivered'])->name('api.delivery.package-shipments.delivered');
         });
-        
-       
+
+
 
         // Ratings with rate limiting
         Route::post('products/{product}/rate', [RatingController::class, 'rateProduct'])
@@ -208,6 +216,28 @@ Route::group(['middleware' => 'locale'], function () {
         Route::post('vendors/{vendor}/report', [ReportController::class, 'reportVendor'])
             ->middleware('throttle:5,1')
             ->name('api.vendors.report');
+
+        // vendor (mobile dashboard) - isolated from user and delivery flows
+        Route::prefix('vendor')->middleware('vendor.user')->group(function () {
+            Route::get('branches', [VendorBranchController::class, 'index'])->name('api.vendor.branches.index');
+            Route::get('branches/{id}', [VendorBranchController::class, 'show'])->name('api.vendor.branches.show');
+
+            Route::get('products/{id}', [VendorProductController::class, 'show'])->name('api.vendor.products.show');
+            Route::delete('products/{id}', [VendorProductController::class, 'destroy'])->name('api.vendor.products.destroy');
+            Route::post('products/{id}/toggle-active', [VendorProductController::class, 'toggleActive'])->name('api.vendor.products.toggle-active');
+            Route::get('ratings', [ApiVendorRatingController::class, 'index'])->name('api.vendor.ratings.index');
+            Route::get('wallet', [ApiVendorWalletController::class, 'index'])->name('api.vendor.wallet.index');
+            Route::post('wallet/withdrawals', [ApiVendorWalletController::class, 'requestWithdrawal'])->name('api.vendor.wallet.withdrawals.store');
+            Route::get('time-slots', [ApiVendorTimeSlotController::class, 'index'])->name('api.vendor.time-slots.index');
+            Route::post('time-slots', [ApiVendorTimeSlotController::class, 'store'])->name('api.vendor.time-slots.store');
+            Route::put('time-slots/{timeSlot}', [ApiVendorTimeSlotController::class, 'update'])->name('api.vendor.time-slots.update');
+            Route::delete('time-slots/{timeSlot}', [ApiVendorTimeSlotController::class, 'destroy'])->name('api.vendor.time-slots.destroy');
+
+            Route::get('orders', [VendorOrderController::class, 'index'])->name('api.vendor.orders.index');
+            Route::get('orders/{id}', [VendorOrderController::class, 'show'])->name('api.vendor.orders.show');
+            Route::post('orders/{id}/update-status', [VendorOrderController::class, 'updateStatus'])->name('api.vendor.orders.update-status');
+            Route::get('orders/{id}/invoice', [VendorOrderController::class, 'invoice'])->name('api.vendor.orders.invoice');
+        });
     });
 
     // Category routes
