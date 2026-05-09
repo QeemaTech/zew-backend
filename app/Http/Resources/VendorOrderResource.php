@@ -26,6 +26,24 @@ class VendorOrderResource extends JsonResource
             'commission' => $this->commission,
             'status' => $this->status,
             'notes' => $this->notes,
+            'payment_method' => $this->order?->payment_method,
+            'created_at' => $this->created_at,
+            'user' => $this->when($this->order && $this->order->user, function () {
+                return [
+                    'id' => $this->order->user->id,
+                    'name' => $this->order->user->name,
+                    'phone' => $this->order->user->phone,
+                    'image' => $this->order->user->image,
+                ];
+            }),
+            'address' => $this->when($this->order && $this->order->address, function () {
+                return [
+                    'id' => $this->order->address->id,
+                    'address' => $this->order->address->address,
+                    'latitude' => $this->order->address->latitude,
+                    'longitude' => $this->order->address->longitude,
+                ];
+            }),
             'vendor' => new VendorResource($this->whenLoaded('vendor')),
             'branch' => new BranchResource($this->whenLoaded('branch')),
             'items' => VendorOrderItemResource::collection($this->whenLoaded('items')),

@@ -11,6 +11,7 @@ class VendorBalanceTransaction extends Model
         'vendor_id',
         'order_id',
         'vendor_order_id',
+        'vendor_withdrawal_id',
         'type',
         'amount',
         'balance_after',
