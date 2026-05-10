@@ -28,7 +28,7 @@ class OrderController extends Controller
 
         $request->validate([
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
-            'status' => ['nullable', 'string', 'in:in-progress,complete,cancelled,pending,processing,ready_for_pickup,shipped,delivered'],
+            'status' => ['nullable', 'string', 'in:in-progress,complete,cancelled,pending,processing,ready_for_pickup,shipped,delivered,refunded'],
             'search' => ['nullable', 'string', 'max:255'],
             'branch_id' => ['nullable', 'integer'],
             'order_id' => ['nullable', 'integer'],
