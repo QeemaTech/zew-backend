@@ -180,11 +180,14 @@ class AuthController extends Controller
     {
         $user = $request->user();
         $user->load('roles', 'permissions');
-
+        if($user->is_vendor){
+            $user->load('vendor');   
+        }
         return response()->json([
             'success' => true,
             'data' => [
                 'user' => new UserResource($user),
+                "vendor" => $user->vendor(),
             ],
         ]);
     }

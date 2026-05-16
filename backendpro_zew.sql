@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 22, 2026 at 10:25 AM
--- Server version: 11.4.10-MariaDB
--- PHP Version: 8.4.18
+-- Generation Time: May 12, 2026 at 09:03 AM
+-- Server version: 8.0.30
+-- PHP Version: 8.3.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,17 +28,17 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `addresses` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `latitude` varchar(255) NOT NULL,
-  `longitude` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `city` varchar(255) DEFAULT NULL,
-  `state` varchar(255) DEFAULT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT 0,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `latitude` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `longitude` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_default` tinyint(1) NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -59,17 +59,17 @@ INSERT INTO `addresses` (`id`, `user_id`, `address`, `latitude`, `longitude`, `n
 --
 
 CREATE TABLE `branches` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `address` varchar(255) NOT NULL,
-  `latitude` varchar(255) DEFAULT NULL,
-  `longitude` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `latitude` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `longitude` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `branches`
@@ -90,10 +90,10 @@ INSERT INTO `branches` (`id`, `vendor_id`, `name`, `address`, `latitude`, `longi
 --
 
 CREATE TABLE `branch_product_stocks` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `branch_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `branch_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `quantity` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -118,10 +118,10 @@ INSERT INTO `branch_product_stocks` (`id`, `branch_id`, `product_id`, `quantity`
 --
 
 CREATE TABLE `branch_product_variant_stocks` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `branch_id` bigint(20) UNSIGNED NOT NULL,
-  `product_variant_id` bigint(20) UNSIGNED NOT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `branch_id` bigint UNSIGNED NOT NULL,
+  `product_variant_id` bigint UNSIGNED NOT NULL,
+  `quantity` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -152,7 +152,9 @@ INSERT INTO `branch_product_variant_stocks` (`id`, `branch_id`, `product_variant
 (103, 5, 28, 5, '2026-01-22 15:25:11', '2026-03-23 13:16:26'),
 (104, 6, 28, 4, '2026-01-22 15:25:11', '2026-03-23 11:11:55'),
 (105, 5, 29, 4, '2026-01-22 15:25:11', '2026-01-22 15:25:11'),
-(106, 6, 29, 7, '2026-01-22 15:25:11', '2026-01-22 15:25:11');
+(106, 6, 29, 7, '2026-01-22 15:25:11', '2026-01-22 15:25:11'),
+(113, 2, 33, 10, '2026-05-10 07:05:59', '2026-05-10 07:05:59'),
+(114, 2, 34, 8, '2026-05-10 07:05:59', '2026-05-10 07:05:59');
 
 -- --------------------------------------------------------
 
@@ -161,9 +163,9 @@ INSERT INTO `branch_product_variant_stocks` (`id`, `branch_id`, `product_variant
 --
 
 CREATE TABLE `cache` (
-  `key` varchar(255) NOT NULL,
-  `value` mediumtext NOT NULL,
-  `expiration` int(11) NOT NULL
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiration` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -185,9 +187,9 @@ INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
 --
 
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
-  `expiration` int(11) NOT NULL
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiration` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -197,11 +199,11 @@ CREATE TABLE `cache_locks` (
 --
 
 CREATE TABLE `cart_items` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `variant_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `variant_id` bigint UNSIGNED DEFAULT NULL,
+  `quantity` int NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -213,17 +215,17 @@ CREATE TABLE `cart_items` (
 --
 
 CREATE TABLE `categories` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `slug` varchar(255) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `is_featured` tinyint(1) NOT NULL DEFAULT 0,
-  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_featured` tinyint(1) NOT NULL DEFAULT '0',
+  `parent_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `categories`
@@ -252,8 +254,8 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `image`, `is_active`, `is_featur
 --
 
 CREATE TABLE `category_product` (
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `category_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `category_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -278,7 +280,8 @@ INSERT INTO `category_product` (`product_id`, `category_id`, `created_at`, `upda
 (15, 9, NULL, NULL),
 (15, 13, NULL, NULL),
 (16, 9, NULL, NULL),
-(16, 14, NULL, NULL);
+(16, 14, NULL, NULL),
+(19, 10, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -287,18 +290,18 @@ INSERT INTO `category_product` (`product_id`, `category_id`, `created_at`, `upda
 --
 
 CREATE TABLE `category_requests` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `description` text DEFAULT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'pending',
-  `admin_notes` text DEFAULT NULL,
-  `reviewed_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `admin_notes` text COLLATE utf8mb4_unicode_ci,
+  `reviewed_by` bigint UNSIGNED DEFAULT NULL,
   `reviewed_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `category_requests`
@@ -316,15 +319,15 @@ INSERT INTO `category_requests` (`id`, `vendor_id`, `name`, `description`, `stat
 --
 
 CREATE TABLE `coupons` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `type` enum('percentage','fixed') NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('percentage','fixed') COLLATE utf8mb4_unicode_ci NOT NULL,
   `discount_value` decimal(10,2) NOT NULL,
-  `min_cart_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `usage_limit_per_user` int(11) DEFAULT NULL,
+  `min_cart_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `usage_limit_per_user` int DEFAULT NULL,
   `start_date` timestamp NULL DEFAULT NULL,
   `end_date` timestamp NULL DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -334,8 +337,8 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`id`, `code`, `type`, `discount_value`, `min_cart_amount`, `usage_limit_per_user`, `start_date`, `end_date`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'HELLO25', 'percentage', 25.00, 500.00, 1, NULL, NULL, 1, '2026-01-19 14:52:16', '2026-01-19 14:52:16'),
-(2, 'ASDSADA', 'percentage', 10.00, 200.00, 1, '2026-03-23 13:11:00', '2026-03-31 13:11:00', 1, '2026-03-23 11:11:47', '2026-03-23 11:11:47');
+(1, 'HELLO25', 'percentage', '25.00', '500.00', 1, NULL, NULL, 1, '2026-01-19 14:52:16', '2026-01-19 14:52:16'),
+(2, 'ASDSADA', 'percentage', '10.00', '200.00', 1, '2026-03-23 13:11:00', '2026-03-31 13:11:00', 1, '2026-03-23 11:11:47', '2026-03-23 11:11:47');
 
 -- --------------------------------------------------------
 
@@ -344,25 +347,26 @@ INSERT INTO `coupons` (`id`, `code`, `type`, `discount_value`, `min_cart_amount`
 --
 
 CREATE TABLE `deliveries` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vehicle_type` varchar(255) NOT NULL,
-  `vehicle_number` varchar(255) NOT NULL,
-  `vehicle_color` varchar(255) NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `wallet` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `attachments` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`attachments`)),
+  `id` bigint UNSIGNED NOT NULL,
+  `vehicle_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle_color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `wallet` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `attachments` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `deliveries`
 --
 
 INSERT INTO `deliveries` (`id`, `vehicle_type`, `vehicle_number`, `vehicle_color`, `user_id`, `wallet`, `is_active`, `attachments`, `created_at`, `updated_at`) VALUES
-(1, 'motorcycle', 'ABC-123', 'red', 20, 59.45, 1, NULL, '2026-02-22 09:25:51', '2026-03-23 12:01:24'),
-(2, 'motorcycle', 'ACB-332', 'black', 21, 2.00, 1, NULL, '2026-02-22 10:16:32', '2026-02-25 14:31:14');
+(1, 'motorcycle', 'ABC-123', 'red', 20, '59.45', 1, NULL, '2026-02-22 09:25:51', '2026-03-23 12:01:24'),
+(2, 'motorcycle', 'ACB-332', 'black', 21, '2.00', 1, NULL, '2026-02-22 10:16:32', '2026-02-25 14:31:14'),
+(3, 'motorcycle', 'ABC-587', 'red', 26, '0.00', 1, NULL, '2026-04-23 11:39:02', '2026-04-23 11:39:02');
 
 -- --------------------------------------------------------
 
@@ -371,12 +375,12 @@ INSERT INTO `deliveries` (`id`, `vehicle_type`, `vehicle_number`, `vehicle_color
 --
 
 CREATE TABLE `delivery_assignments` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `delivery_id` bigint(20) UNSIGNED NOT NULL,
-  `status` varchar(30) NOT NULL DEFAULT 'assigned',
-  `total_km` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `shipping_cost` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `delivery_id` bigint UNSIGNED NOT NULL,
+  `status` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'assigned',
+  `total_km` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `shipping_cost` decimal(10,2) NOT NULL DEFAULT '0.00',
   `assigned_at` timestamp NULL DEFAULT NULL,
   `delivered_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -388,7 +392,7 @@ CREATE TABLE `delivery_assignments` (
 --
 
 INSERT INTO `delivery_assignments` (`id`, `order_id`, `delivery_id`, `status`, `total_km`, `shipping_cost`, `assigned_at`, `delivered_at`, `created_at`, `updated_at`) VALUES
-(1, 10, 1, 'delivered', 11.89, 59.45, '2026-03-23 11:20:28', '2026-03-23 12:01:24', '2026-03-23 11:20:28', '2026-03-23 12:01:24');
+(1, 10, 1, 'delivered', '11.89', '59.45', '2026-03-23 11:20:28', '2026-03-23 12:01:24', '2026-03-23 11:20:28', '2026-03-23 12:01:24');
 
 -- --------------------------------------------------------
 
@@ -397,10 +401,10 @@ INSERT INTO `delivery_assignments` (`id`, `order_id`, `delivery_id`, `status`, `
 --
 
 CREATE TABLE `delivery_assignment_pickups` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `delivery_assignment_id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_order_id` bigint(20) UNSIGNED NOT NULL,
-  `sequence` tinyint(3) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `delivery_assignment_id` bigint UNSIGNED NOT NULL,
+  `vendor_order_id` bigint UNSIGNED NOT NULL,
+  `sequence` tinyint UNSIGNED NOT NULL,
   `picked_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -421,19 +425,19 @@ INSERT INTO `delivery_assignment_pickups` (`id`, `delivery_assignment_id`, `vend
 --
 
 CREATE TABLE `delivery_requests` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `vehicle_type` varchar(255) NOT NULL,
-  `vehicle_number` varchar(255) NOT NULL,
-  `vehicle_color` varchar(255) NOT NULL,
-  `message` text DEFAULT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'pending',
-  `reviewed_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vehicle_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle_color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `reviewed_by` bigint UNSIGNED DEFAULT NULL,
   `reviewed_at` timestamp NULL DEFAULT NULL,
-  `rejection_reason` text DEFAULT NULL,
+  `rejection_reason` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -453,9 +457,9 @@ INSERT INTO `delivery_requests` (`id`, `user_id`, `name`, `phone`, `email`, `veh
 --
 
 CREATE TABLE `delivery_shift` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `delivery_id` bigint(20) UNSIGNED NOT NULL,
-  `shift_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `delivery_id` bigint UNSIGNED NOT NULL,
+  `shift_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -474,14 +478,14 @@ INSERT INTO `delivery_shift` (`id`, `delivery_id`, `shift_id`, `created_at`, `up
 --
 
 CREATE TABLE `delivery_wallet_transactions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `delivery_id` bigint(20) UNSIGNED NOT NULL,
-  `type` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `delivery_id` bigint UNSIGNED NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(12,2) NOT NULL,
   `balance_after` decimal(12,2) NOT NULL,
-  `reference_type` varchar(255) DEFAULT NULL,
-  `reference_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `notes` text DEFAULT NULL,
+  `reference_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reference_id` bigint UNSIGNED DEFAULT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -491,9 +495,9 @@ CREATE TABLE `delivery_wallet_transactions` (
 --
 
 INSERT INTO `delivery_wallet_transactions` (`id`, `delivery_id`, `type`, `amount`, `balance_after`, `reference_type`, `reference_id`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 2, 'admin_adjustment', 5.00, 5.00, NULL, NULL, 'Admin wallet adjustment', '2026-02-22 14:47:00', '2026-02-22 14:47:00'),
-(2, 2, 'admin_adjustment', -3.00, 2.00, NULL, NULL, 'Admin wallet adjustment', '2026-02-25 14:31:14', '2026-02-25 14:31:14'),
-(3, 1, 'delivery_completed', 59.45, 59.45, 'App\\Models\\DeliveryAssignment', 1, 'Order #10 delivery completed', '2026-03-23 12:01:24', '2026-03-23 12:01:24');
+(1, 2, 'admin_adjustment', '5.00', '5.00', NULL, NULL, 'Admin wallet adjustment', '2026-02-22 14:47:00', '2026-02-22 14:47:00'),
+(2, 2, 'admin_adjustment', '-3.00', '2.00', NULL, NULL, 'Admin wallet adjustment', '2026-02-25 14:31:14', '2026-02-25 14:31:14'),
+(3, 1, 'delivery_completed', '59.45', '59.45', 'App\\Models\\DeliveryAssignment', 1, 'Order #10 delivery completed', '2026-03-23 12:01:24', '2026-03-23 12:01:24');
 
 -- --------------------------------------------------------
 
@@ -502,9 +506,9 @@ INSERT INTO `delivery_wallet_transactions` (`id`, `delivery_id`, `type`, `amount
 --
 
 CREATE TABLE `delivery_zone` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `delivery_id` bigint(20) UNSIGNED NOT NULL,
-  `zone_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `delivery_id` bigint UNSIGNED NOT NULL,
+  `zone_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -520,7 +524,10 @@ INSERT INTO `delivery_zone` (`id`, `delivery_id`, `zone_id`, `created_at`, `upda
 (4, 2, 2, '2026-02-22 10:17:28', '2026-02-22 10:17:28'),
 (5, 2, 5, '2026-02-22 10:17:28', '2026-02-22 10:17:28'),
 (6, 2, 10, '2026-02-25 14:32:25', '2026-02-25 14:32:25'),
-(7, 2, 9, '2026-02-25 14:32:25', '2026-02-25 14:32:25');
+(7, 2, 9, '2026-02-25 14:32:25', '2026-02-25 14:32:25'),
+(8, 3, 4, '2026-04-23 11:39:02', '2026-04-23 11:39:02'),
+(9, 3, 5, '2026-04-23 11:39:02', '2026-04-23 11:39:02'),
+(10, 3, 3, '2026-04-23 11:39:02', '2026-04-23 11:39:02');
 
 -- --------------------------------------------------------
 
@@ -529,13 +536,13 @@ INSERT INTO `delivery_zone` (`id`, `delivery_id`, `zone_id`, `created_at`, `upda
 --
 
 CREATE TABLE `failed_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) NOT NULL,
-  `connection` text NOT NULL,
-  `queue` text NOT NULL,
-  `payload` longtext NOT NULL,
-  `exception` longtext NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -556,9 +563,9 @@ INSERT INTO `failed_jobs` (`id`, `uuid`, `connection`, `queue`, `payload`, `exce
 --
 
 CREATE TABLE `favorites` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -570,13 +577,13 @@ CREATE TABLE `favorites` (
 --
 
 CREATE TABLE `jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `queue` varchar(255) NOT NULL,
-  `payload` longtext NOT NULL,
-  `attempts` tinyint(3) UNSIGNED NOT NULL,
-  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
-  `available_at` int(10) UNSIGNED NOT NULL,
-  `created_at` int(10) UNSIGNED NOT NULL
+  `id` bigint UNSIGNED NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` tinyint UNSIGNED NOT NULL,
+  `reserved_at` int UNSIGNED DEFAULT NULL,
+  `available_at` int UNSIGNED NOT NULL,
+  `created_at` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -586,16 +593,16 @@ CREATE TABLE `jobs` (
 --
 
 CREATE TABLE `job_batches` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `total_jobs` int(11) NOT NULL,
-  `pending_jobs` int(11) NOT NULL,
-  `failed_jobs` int(11) NOT NULL,
-  `failed_job_ids` longtext NOT NULL,
-  `options` mediumtext DEFAULT NULL,
-  `cancelled_at` int(11) DEFAULT NULL,
-  `created_at` int(11) NOT NULL,
-  `finished_at` int(11) DEFAULT NULL
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_jobs` int NOT NULL,
+  `pending_jobs` int NOT NULL,
+  `failed_jobs` int NOT NULL,
+  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext COLLATE utf8mb4_unicode_ci,
+  `cancelled_at` int DEFAULT NULL,
+  `created_at` int NOT NULL,
+  `finished_at` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -605,9 +612,9 @@ CREATE TABLE `job_batches` (
 --
 
 CREATE TABLE `migrations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) NOT NULL,
-  `batch` int(11) NOT NULL
+  `id` int UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -689,7 +696,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (85, '2026_02_22_152344_add_max_delivery_wallet_setting', 38),
 (86, '2026_02_22_153228_create_delivery_wallet_transactions_table', 39),
 (87, '2026_02_23_122826_create_vendor_time_slots_table', 40),
-(89, '2026_03_23_145542_add_attachments_to_deliveries_table', 41);
+(89, '2026_03_23_145542_add_attachments_to_deliveries_table', 41),
+(90, '2026_04_23_100000_create_package_sizes_table', 42),
+(91, '2026_04_23_100100_create_package_shipments_table', 42),
+(92, '2026_04_23_100200_create_package_shipment_assignments_table', 42);
 
 -- --------------------------------------------------------
 
@@ -698,9 +708,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `model_has_permissions` (
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) NOT NULL,
-  `model_id` bigint(20) UNSIGNED NOT NULL
+  `permission_id` bigint UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -746,9 +756,9 @@ INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) 
 --
 
 CREATE TABLE `model_has_roles` (
-  `role_id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) NOT NULL,
-  `model_id` bigint(20) UNSIGNED NOT NULL
+  `role_id` bigint UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -774,7 +784,10 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (4, 'App\\Models\\User', 19),
 (4, 'App\\Models\\User', 22),
 (4, 'App\\Models\\User', 23),
-(3, 'App\\Models\\User', 24);
+(3, 'App\\Models\\User', 24),
+(3, 'App\\Models\\User', 25),
+(2, 'App\\Models\\User', 30),
+(2, 'App\\Models\\User', 31);
 
 -- --------------------------------------------------------
 
@@ -783,11 +796,11 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 --
 
 CREATE TABLE `notifications` (
-  `id` char(36) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `notifiable_type` varchar(255) NOT NULL,
-  `notifiable_id` bigint(20) UNSIGNED NOT NULL,
-  `data` text NOT NULL,
+  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_id` bigint UNSIGNED NOT NULL,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `read_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -806,25 +819,33 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 ('166013f3-a3b0-43f8-a6b1-9b088c80068a', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":3,\"vendor_order_id\":5,\"status\":\"shipped\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #5 of order #3 status changed to shipped\"}', NULL, '2026-01-25 13:14:37', '2026-01-25 13:14:37'),
 ('1ca5b895-db9f-4f3f-b356-cacebfd771b4', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 19, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":13,\"branch_id\":5,\"product_id\":10,\"product_variant_id\":null,\"quantity\":5,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Product low stock: Nescafe Gold - 190 g (Product #10)\"}', NULL, '2026-03-23 11:14:34', '2026-03-23 11:14:34'),
 ('2549fd7d-f4aa-4a68-8d38-6146b54bf92c', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":8,\"vendor_order_id\":16,\"status\":\"ready_for_pickup\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #16 of order #8 status changed to ready_for_pickup\"}', NULL, '2026-02-22 10:56:39', '2026-02-22 10:56:39'),
+('25ff7f52-c4c9-4e9f-9bcf-ce5b37edc61f', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 20, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":4,\"pickup_address\":\"City Center, Makram Abaid Street, Sixth Area, Nasr City, Cairo, 11391, Egypt\",\"dropoff_address\":\"Caribou Coffee, Fatma Bent Mubarak Street, Masaken Al Mohandeseen, Nasr City, Cairo, 11834, Egypt\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:20:36', '2026-04-23 13:20:36'),
 ('30d6c1e3-b429-456f-8e7e-09cde7d32a26', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":8,\"vendor_order_id\":14,\"status\":\"processing\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #14 of order #8 status changed to processing\"}', NULL, '2026-02-22 11:46:54', '2026-02-22 11:46:54'),
 ('345a271f-4ae6-42a8-874a-c0028bc28cbf', 'App\\Notifications\\AdminManualNotification', 'App\\Models\\User', 18, '{\"title\":\"Test Notification\",\"message\":\"Test Content\",\"sent_by_admin_id\":1}', NULL, '2026-01-21 10:15:03', '2026-01-21 10:15:03'),
 ('376d20a1-4799-4aa6-9062-f6945af94cb0', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 4, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":3,\"branch_id\":1,\"product_id\":7,\"product_variant_id\":8,\"quantity\":4,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Variant low stock: Hohos (Variant #8)\"}', NULL, '2026-02-22 10:42:57', '2026-02-22 10:42:57'),
+('3af360d4-d094-4742-9ad5-11146448e1cd', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 21, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":4,\"pickup_address\":\"City Center, Makram Abaid Street, Sixth Area, Nasr City, Cairo, 11391, Egypt\",\"dropoff_address\":\"Caribou Coffee, Fatma Bent Mubarak Street, Masaken Al Mohandeseen, Nasr City, Cairo, 11834, Egypt\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:20:36', '2026-04-23 13:20:36'),
 ('3b483d7a-3e26-4318-8058-a79a235a9c77', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 1, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":12,\"branch_id\":4,\"product_id\":8,\"product_variant_id\":null,\"quantity\":4,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Product low stock: Test Product (Product #8)\"}', NULL, '2026-02-22 10:42:59', '2026-02-22 10:42:59'),
+('3e57f860-fdc5-4417-a215-baf605ca5190', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 20, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":2,\"pickup_address\":\"30.068430886007, 31.344674868032\",\"dropoff_address\":\"30.074300880442, 31.343945800592\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:01:20', '2026-04-23 13:01:20'),
 ('43435493-fb53-4b72-93ac-73f251106797', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 1, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":3,\"branch_id\":1,\"product_id\":7,\"product_variant_id\":8,\"quantity\":4,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Variant low stock: Hohos (Variant #8)\"}', NULL, '2026-02-22 10:42:57', '2026-02-22 10:42:57'),
 ('453215f6-6375-486e-8943-36a63b9b9eb8', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 24, '{\"order_id\":9,\"vendor_order_id\":18,\"status\":\"ready_for_pickup\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #18 of order #9 status changed to ready_for_pickup\"}', NULL, '2026-03-23 11:39:37', '2026-03-23 11:39:37'),
 ('4748eb59-f8f6-4890-a90d-3ef2c26c43b2', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 24, '{\"order_id\":10,\"vendor_order_id\":20,\"status\":\"processing\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #20 of order #10 status changed to processing\"}', NULL, '2026-03-23 11:19:35', '2026-03-23 11:19:35'),
 ('4df3d191-aff3-43a4-8825-8ff6161752d8', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 16, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":13,\"branch_id\":5,\"product_id\":15,\"product_variant_id\":28,\"quantity\":5,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Variant low stock: El Abd Chocolate Cookies (Variant #28)\"}', NULL, '2026-02-22 10:42:59', '2026-02-22 10:42:59'),
 ('509839bb-10ae-43bd-ae01-ba90a3572e66', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":8,\"vendor_order_id\":16,\"status\":\"processing\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #16 of order #8 status changed to processing\"}', NULL, '2026-02-22 10:47:41', '2026-02-22 10:47:41'),
+('50c4bdc2-a832-4537-8850-f2c62b2b7878', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 21, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":2,\"pickup_address\":\"30.068430886007, 31.344674868032\",\"dropoff_address\":\"30.074300880442, 31.343945800592\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:01:20', '2026-04-23 13:01:20'),
 ('59937956-d9e2-4fce-9b07-4dc845442066', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 17, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":13,\"branch_id\":6,\"product_id\":10,\"product_variant_id\":null,\"quantity\":1,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Product low stock: Nescafe Gold - 190 g (Product #10)\"}', NULL, '2026-03-23 11:11:57', '2026-03-23 11:11:57'),
 ('5cab9a6a-5c03-4a59-99a0-e44af81a8bcc', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":8,\"vendor_order_id\":14,\"status\":\"ready_for_pickup\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #14 of order #8 status changed to ready_for_pickup\"}', NULL, '2026-02-22 11:47:00', '2026-02-22 11:47:00'),
 ('5db2ab36-92dc-4ff0-bfab-e62f0cb05e59', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 23, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":13,\"branch_id\":6,\"product_id\":10,\"product_variant_id\":null,\"quantity\":1,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Product low stock: Nescafe Gold - 190 g (Product #10)\"}', NULL, '2026-03-23 11:11:58', '2026-03-23 11:11:58'),
 ('5ee501d2-9577-422c-9250-5a70467b9778', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 24, '{\"order_id\":9,\"vendor_order_id\":17,\"status\":\"ready_for_pickup\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #17 of order #9 status changed to ready_for_pickup\"}', NULL, '2026-03-23 11:38:49', '2026-03-23 11:38:49'),
 ('66a9a1ab-08c9-4fab-8c89-4a3f79785c8c', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 1, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":13,\"branch_id\":5,\"product_id\":10,\"product_variant_id\":null,\"quantity\":5,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Product low stock: Nescafe Gold - 190 g (Product #10)\"}', NULL, '2026-03-23 11:14:35', '2026-03-23 11:14:35'),
+('683c0ef0-8d54-4068-a144-db41bde22ad8', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 26, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":4,\"pickup_address\":\"City Center, Makram Abaid Street, Sixth Area, Nasr City, Cairo, 11391, Egypt\",\"dropoff_address\":\"Caribou Coffee, Fatma Bent Mubarak Street, Masaken Al Mohandeseen, Nasr City, Cairo, 11834, Egypt\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:20:36', '2026-04-23 13:20:36'),
+('73970a85-6897-4fa9-a601-dc7d354fe84b', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 21, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":4,\"pickup_address\":\"City Center, Makram Abaid Street, Sixth Area, Nasr City, Cairo, 11391, Egypt\",\"dropoff_address\":\"Caribou Coffee, Fatma Bent Mubarak Street, Masaken Al Mohandeseen, Nasr City, Cairo, 11834, Egypt\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:22:39', '2026-04-23 13:22:39'),
 ('7f73d1e6-6fb8-479a-a30e-42e64fd6fcb2', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":8,\"vendor_order_id\":15,\"status\":\"processing\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #15 of order #8 status changed to processing\"}', NULL, '2026-02-22 11:45:51', '2026-02-22 11:45:51'),
 ('81f8d374-f011-4c42-9c32-05c53f21130e', 'App\\Notifications\\TicketMessageAddedNotification', 'App\\Models\\User', 18, '{\"ticket_id\":6,\"ticket_message_id\":6,\"title\":\"New ticket message\",\"message\":\"New message on ticket #6\",\"sender_type\":\"admin\",\"sender_id\":1}', NULL, '2026-01-25 12:38:33', '2026-01-25 12:38:33'),
 ('82c1d185-0116-4b91-a167-1699b08f8ffe', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 16, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":13,\"branch_id\":6,\"product_id\":10,\"product_variant_id\":null,\"quantity\":1,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Product low stock: Nescafe Gold - 190 g (Product #10)\"}', NULL, '2026-03-23 11:11:56', '2026-03-23 11:11:56'),
 ('8a2eb80f-1225-4adf-967c-66a2f1de88c4', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 19, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":13,\"branch_id\":6,\"product_id\":10,\"product_variant_id\":null,\"quantity\":1,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Product low stock: Nescafe Gold - 190 g (Product #10)\"}', NULL, '2026-03-23 11:11:57', '2026-03-23 11:11:57'),
 ('8e3d0cb7-1e04-44f7-9318-5f6699aa27ed', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 24, '{\"order_id\":9,\"vendor_order_id\":18,\"status\":\"processing\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #18 of order #9 status changed to processing\"}', NULL, '2026-03-23 11:39:31', '2026-03-23 11:39:31'),
+('9d0b977f-2dc1-49c2-914b-7df6a23b0ebe', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 26, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":4,\"pickup_address\":\"City Center, Makram Abaid Street, Sixth Area, Nasr City, Cairo, 11391, Egypt\",\"dropoff_address\":\"Caribou Coffee, Fatma Bent Mubarak Street, Masaken Al Mohandeseen, Nasr City, Cairo, 11834, Egypt\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:22:39', '2026-04-23 13:22:39'),
+('9ea9da8d-4f68-4cb1-9f7e-6e0edffb9567', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 20, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":4,\"pickup_address\":\"City Center, Makram Abaid Street, Sixth Area, Nasr City, Cairo, 11391, Egypt\",\"dropoff_address\":\"Caribou Coffee, Fatma Bent Mubarak Street, Masaken Al Mohandeseen, Nasr City, Cairo, 11834, Egypt\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:22:39', '2026-04-23 13:22:39'),
 ('9ec23c17-9a50-4bc4-8590-904d69330e39', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":8,\"vendor_order_id\":15,\"status\":\"ready_for_pickup\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #15 of order #8 status changed to ready_for_pickup\"}', NULL, '2026-02-22 11:46:25', '2026-02-22 11:46:25'),
 ('9f0f32c9-8905-47f7-b77c-ca3082df8ef6', 'App\\Notifications\\InventoryAlertNotification', 'App\\Models\\User', 17, '{\"type\":\"inventory_alert\",\"level\":\"low\",\"vendor_id\":13,\"branch_id\":5,\"product_id\":10,\"product_variant_id\":null,\"quantity\":5,\"threshold\":10,\"title\":\"Low stock alert\",\"message\":\"Product low stock: Nescafe Gold - 190 g (Product #10)\"}', NULL, '2026-03-23 11:14:33', '2026-03-23 11:14:33'),
 ('a7572c8b-374c-455f-a8e5-299f7861519b', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 24, '{\"order_id\":10,\"vendor_order_id\":19,\"status\":\"processing\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #19 of order #10 status changed to processing\"}', NULL, '2026-03-23 11:20:10', '2026-03-23 11:20:10'),
@@ -841,7 +862,8 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 ('e89a6e16-7b05-4f9d-86c8-0685113db278', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 24, '{\"order_id\":9,\"vendor_order_id\":17,\"status\":\"processing\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #17 of order #9 status changed to processing\"}', NULL, '2026-03-23 11:38:44', '2026-03-23 11:38:44'),
 ('f145a841-f382-407c-818d-38b3ab7134e7', 'App\\Notifications\\TicketCreatedNotification', 'App\\Models\\User', 1, '{\"ticket_id\":5,\"title\":\"New support ticket\",\"message\":\"Ticket #5 - Test Subject\",\"status\":null,\"ticket_from\":\"user\",\"vendor_id\":null}', NULL, '2026-01-20 11:55:56', '2026-01-20 11:55:56'),
 ('f26d0868-b478-486a-9c2c-70af06c2be21', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":6,\"vendor_order_id\":11,\"status\":\"delivered\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #11 of order #6 status changed to delivered\"}', NULL, '2026-01-21 11:03:20', '2026-01-21 11:03:20'),
-('f936d24e-9971-49e3-bddf-0b84bc1086b6', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":6,\"vendor_order_id\":10,\"status\":\"delivered\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #10 of order #6 status changed to delivered\"}', NULL, '2026-01-21 11:04:57', '2026-01-21 11:04:57');
+('f936d24e-9971-49e3-bddf-0b84bc1086b6', 'App\\Notifications\\OrderStatusUpdatedNotification', 'App\\Models\\User', 18, '{\"order_id\":6,\"vendor_order_id\":10,\"status\":\"delivered\",\"title\":\"Your order status has been updated\",\"message\":\"Vendor order #10 of order #6 status changed to delivered\"}', NULL, '2026-01-21 11:04:57', '2026-01-21 11:04:57'),
+('fd927e22-f564-40c7-a754-88488df75f45', 'App\\Notifications\\PackageShipmentAvailableNotification', 'App\\Models\\User', 26, '{\"type\":\"package_shipment_available\",\"package_shipment_id\":2,\"pickup_address\":\"30.068430886007, 31.344674868032\",\"dropoff_address\":\"30.074300880442, 31.343945800592\",\"total_price\":3.3,\"distance_km\":0.66}', NULL, '2026-04-23 13:01:20', '2026-04-23 13:01:20');
 
 -- --------------------------------------------------------
 
@@ -850,26 +872,26 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 --
 
 CREATE TABLE `orders` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
   `sub_total` decimal(10,2) NOT NULL,
-  `order_discount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `coupon_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `coupon_discount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `total_shipping` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `points_discount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `order_discount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `coupon_id` bigint UNSIGNED DEFAULT NULL,
+  `coupon_discount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `total_shipping` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `points_discount` decimal(10,2) NOT NULL DEFAULT '0.00',
   `total` decimal(10,2) NOT NULL,
-  `wallet_used` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `status` enum('pending','processing','ready_for_delivery','shipped','delivered','cancelled','refunded') DEFAULT 'pending',
-  `payment_status` enum('pending','paid','failed','refunded') NOT NULL DEFAULT 'pending',
-  `payment_method` varchar(255) DEFAULT NULL,
+  `wallet_used` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `status` enum('pending','processing','ready_for_delivery','shipped','delivered','cancelled','refunded') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `payment_status` enum('pending','paid','failed','refunded') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `payment_method` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `paid_at` timestamp NULL DEFAULT NULL,
   `vendor_balance_processed_at` timestamp NULL DEFAULT NULL,
-  `notes` text DEFAULT NULL,
-  `address_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `total_commission` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `refund_status` varchar(255) NOT NULL DEFAULT 'none',
-  `refunded_total` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `address_id` bigint UNSIGNED DEFAULT NULL,
+  `total_commission` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `refund_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `refunded_total` decimal(10,2) NOT NULL DEFAULT '0.00',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -880,16 +902,16 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `sub_total`, `order_discount`, `coupon_id`, `coupon_discount`, `total_shipping`, `points_discount`, `total`, `wallet_used`, `status`, `payment_status`, `payment_method`, `paid_at`, `vendor_balance_processed_at`, `notes`, `address_id`, `total_commission`, `refund_status`, `refunded_total`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 18, 55.00, 0.00, NULL, 0.00, 25.00, 0.00, 80.00, 0.00, 'pending', 'pending', NULL, NULL, NULL, NULL, 1, 0.00, 'none', 0.00, '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
-(2, 18, 960.00, 0.00, NULL, 0.00, 25.00, 0.00, 985.00, 0.00, 'cancelled', 'pending', NULL, NULL, NULL, NULL, 1, 0.00, 'none', 0.00, '2026-01-19 12:52:44', '2026-01-19 13:44:51', NULL),
-(3, 18, 971.00, 49.00, NULL, 0.00, 25.00, 0.00, 996.00, 0.00, 'processing', 'paid', 'COD', '2026-01-21 10:35:47', '2026-01-21 10:35:47', NULL, 1, 0.00, 'none', 0.00, '2026-01-19 13:08:22', '2026-01-25 13:14:24', NULL),
-(4, 18, 971.00, 49.00, NULL, 0.00, 25.00, 0.00, 947.00, 0.00, 'processing', 'pending', NULL, NULL, NULL, NULL, 1, 0.00, 'none', 0.00, '2026-01-19 13:16:43', '2026-01-20 08:23:26', NULL),
-(5, 18, 50.00, 0.00, NULL, 0.00, 0.00, 0.00, 50.00, 0.00, 'pending', 'pending', NULL, NULL, NULL, NULL, 1, 0.00, 'none', 0.00, '2026-01-19 13:50:08', '2026-01-19 13:50:08', NULL),
-(6, 18, 971.00, 49.00, NULL, 0.00, 100.00, 0.00, 1022.00, 0.00, 'delivered', 'pending', NULL, NULL, NULL, NULL, 1, 0.00, 'none', 0.00, '2026-01-19 14:54:26', '2026-01-21 11:04:54', NULL),
-(7, 18, 971.00, 49.00, 1, 242.75, 100.00, 0.00, 779.25, 0.00, 'refunded', 'refunded', NULL, NULL, NULL, NULL, 1, 0.00, 'refunded', 779.25, '2026-01-19 14:57:29', '2026-01-20 10:54:13', NULL),
-(8, 18, 321.00, 54.00, NULL, 0.00, 0.00, 0.00, 292.00, 0.00, 'ready_for_delivery', 'pending', NULL, NULL, NULL, NULL, 2, 0.00, 'none', 0.00, '2026-02-22 10:42:39', '2026-02-22 11:46:58', NULL),
-(9, 24, 2164.00, 106.00, NULL, 0.00, 235.00, 0.00, 2293.00, 0.00, 'ready_for_delivery', 'pending', NULL, NULL, NULL, NULL, 3, 0.00, 'none', 0.00, '2026-03-23 11:11:55', '2026-03-23 11:39:35', NULL),
-(10, 24, 2164.00, 106.00, NULL, 0.00, 60.00, 0.00, 2118.00, 0.00, 'delivered', 'refunded', 'COD', '2026-03-23 13:24:15', '2026-03-23 13:24:15', NULL, 3, 0.00, 'refunded', 2118.00, '2026-03-23 11:14:31', '2026-03-23 13:37:16', NULL);
+(1, 18, '55.00', '0.00', NULL, '0.00', '25.00', '0.00', '80.00', '0.00', 'pending', 'pending', NULL, NULL, NULL, NULL, 1, '0.00', 'none', '0.00', '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
+(2, 18, '960.00', '0.00', NULL, '0.00', '25.00', '0.00', '985.00', '0.00', 'cancelled', 'pending', NULL, NULL, NULL, NULL, 1, '0.00', 'none', '0.00', '2026-01-19 12:52:44', '2026-01-19 13:44:51', NULL),
+(3, 18, '971.00', '49.00', NULL, '0.00', '25.00', '0.00', '996.00', '0.00', 'processing', 'paid', 'COD', '2026-01-21 10:35:47', '2026-01-21 10:35:47', NULL, 1, '0.00', 'none', '0.00', '2026-01-19 13:08:22', '2026-01-25 13:14:24', NULL),
+(4, 18, '971.00', '49.00', NULL, '0.00', '25.00', '0.00', '947.00', '0.00', 'processing', 'pending', NULL, NULL, NULL, NULL, 1, '0.00', 'none', '0.00', '2026-01-19 13:16:43', '2026-01-20 08:23:26', NULL),
+(5, 18, '50.00', '0.00', NULL, '0.00', '0.00', '0.00', '50.00', '0.00', 'pending', 'pending', NULL, NULL, NULL, NULL, 1, '0.00', 'none', '0.00', '2026-01-19 13:50:08', '2026-01-19 13:50:08', NULL),
+(6, 18, '971.00', '49.00', NULL, '0.00', '100.00', '0.00', '1022.00', '0.00', 'delivered', 'pending', NULL, NULL, NULL, NULL, 1, '0.00', 'none', '0.00', '2026-01-19 14:54:26', '2026-01-21 11:04:54', NULL),
+(7, 18, '971.00', '49.00', 1, '242.75', '100.00', '0.00', '779.25', '0.00', 'refunded', 'refunded', NULL, NULL, NULL, NULL, 1, '0.00', 'refunded', '779.25', '2026-01-19 14:57:29', '2026-01-20 10:54:13', NULL),
+(8, 18, '321.00', '54.00', NULL, '0.00', '0.00', '0.00', '292.00', '0.00', 'ready_for_delivery', 'pending', NULL, NULL, NULL, NULL, 2, '0.00', 'none', '0.00', '2026-02-22 10:42:39', '2026-02-22 11:46:58', NULL),
+(9, 24, '2164.00', '106.00', NULL, '0.00', '235.00', '0.00', '2293.00', '0.00', 'ready_for_delivery', 'pending', NULL, NULL, NULL, NULL, 3, '0.00', 'none', '0.00', '2026-03-23 11:11:55', '2026-03-23 11:39:35', NULL),
+(10, 24, '2164.00', '106.00', NULL, '0.00', '60.00', '0.00', '2118.00', '0.00', 'delivered', 'refunded', 'COD', '2026-03-23 13:24:15', '2026-03-23 13:24:15', 'test note', 3, '0.00', 'refunded', '2118.00', '2026-03-23 11:14:31', '2026-03-23 13:37:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -898,17 +920,17 @@ INSERT INTO `orders` (`id`, `user_id`, `sub_total`, `order_discount`, `coupon_id
 --
 
 CREATE TABLE `order_logs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `vendor_order_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `type` varchar(255) NOT NULL,
-  `from_status` varchar(255) DEFAULT NULL,
-  `to_status` varchar(255) DEFAULT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`payload`)),
+  `id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED DEFAULT NULL,
+  `vendor_order_id` bigint UNSIGNED DEFAULT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `to_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `order_logs`
@@ -976,13 +998,13 @@ INSERT INTO `order_logs` (`id`, `order_id`, `vendor_order_id`, `user_id`, `type`
 --
 
 CREATE TABLE `order_refund_requests` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
-  `reason` varchar(255) DEFAULT NULL,
-  `details` text DEFAULT NULL,
-  `processed_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `status` enum('pending','approved','rejected') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `reason` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `details` text COLLATE utf8mb4_unicode_ci,
+  `processed_by` bigint UNSIGNED DEFAULT NULL,
   `processed_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -998,14 +1020,173 @@ INSERT INTO `order_refund_requests` (`id`, `order_id`, `user_id`, `status`, `rea
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `package_shipments`
+--
+
+CREATE TABLE `package_shipments` (
+  `id` bigint UNSIGNED NOT NULL,
+  `sender_id` bigint UNSIGNED NOT NULL,
+  `package_size_id` bigint UNSIGNED NOT NULL,
+  `receiver_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `receiver_phone` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pickup_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pickup_lat` decimal(10,7) NOT NULL,
+  `pickup_lng` decimal(10,7) NOT NULL,
+  `dropoff_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dropoff_lat` decimal(10,7) NOT NULL,
+  `dropoff_lng` decimal(10,7) NOT NULL,
+  `package_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `package_size_name_snapshot` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `package_height_cm` decimal(8,2) NOT NULL,
+  `package_width_cm` decimal(8,2) NOT NULL,
+  `package_length_cm` decimal(8,2) NOT NULL,
+  `size_multiplier_snapshot` decimal(8,2) NOT NULL DEFAULT '1.00',
+  `distance_km` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `price_per_km` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `base_price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `total_price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `status` enum('pending','accepted','assigned','picked_up','in_transit','delivered','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `payment_status` enum('pending','paid','failed','refunded') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `payment_method` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `wallet_used` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `refund_status` enum('none','requested','approved','rejected','refunded') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `refunded_total` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `paid_at` timestamp NULL DEFAULT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `package_shipments`
+--
+
+INSERT INTO `package_shipments` (`id`, `sender_id`, `package_size_id`, `receiver_name`, `receiver_phone`, `pickup_address`, `pickup_lat`, `pickup_lng`, `dropoff_address`, `dropoff_lat`, `dropoff_lng`, `package_image`, `package_size_name_snapshot`, `package_height_cm`, `package_width_cm`, `package_length_cm`, `size_multiplier_snapshot`, `distance_km`, `price_per_km`, `base_price`, `total_price`, `status`, `payment_status`, `payment_method`, `wallet_used`, `refund_status`, `refunded_total`, `paid_at`, `notes`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 25, 1, 'Ahmed Salem', '01006573885', '3 makrem', '30.0684309', '31.3446749', 'city stars', '30.0743009', '31.3439458', NULL, 'Small', '20.00', '30.00', '30.00', '1.00', '0.66', '5.00', '3.30', '3.30', 'delivered', 'pending', NULL, '0.00', 'none', '0.00', NULL, NULL, '2026-04-23 11:20:36', '2026-04-23 12:36:01', NULL),
+(2, 25, 1, 'Salem Kamel', '01006573885', '30.068430886007, 31.344674868032', '30.0684309', '31.3446749', '30.074300880442, 31.343945800592', '30.0743009', '31.3439458', 'package-shipments/zWzAfGLkgXrGdIhSi8FWv9Pjf2ZJwCV5JcXaLvzU.jpg', 'Small', '20.00', '30.00', '30.00', '1.00', '0.66', '5.00', '3.30', '3.30', 'delivered', 'paid', 'cach', '0.00', 'none', '0.00', '2026-04-23 13:01:20', NULL, '2026-04-23 12:54:40', '2026-04-23 13:03:13', NULL),
+(3, 25, 1, 'Selim Ahmed', '01006573885', '30.068431, 31.344675', '30.0684309', '31.3446749', '30.074301, 31.343946', '30.0743009', '31.3439458', 'package-shipments/JeAGdS5ZB9Onj1wiFjg050FCmzTttFc3esFhAKrs.jpg', 'Small', '20.00', '30.00', '30.00', '1.00', '0.66', '5.00', '3.30', '3.30', 'pending', 'pending', NULL, '0.00', 'none', '0.00', NULL, NULL, '2026-04-23 13:16:03', '2026-04-23 13:16:03', NULL),
+(4, 25, 1, 'Selim Ahmed', '01006573885', 'City Center, Makram Abaid Street, Sixth Area, Nasr City, Cairo, 11391, Egypt', '30.0684309', '31.3446749', 'Caribou Coffee, Fatma Bent Mubarak Street, Masaken Al Mohandeseen, Nasr City, Cairo, 11834, Egypt', '30.0743009', '31.3439458', 'package-shipments/uujZdVfYw346jkeqnRnopw8bTymWfI3AGhuFRrfP.jpg', 'Small', '20.00', '30.00', '30.00', '1.00', '0.66', '5.00', '3.30', '3.30', 'delivered', 'paid', 'cash', '0.00', 'none', '0.00', '2026-04-23 13:27:43', NULL, '2026-04-23 13:19:58', '2026-04-23 13:27:43', NULL),
+(5, 25, 3, 'Ahmed Ashraf', '0121547877', '26, Nehrou Street, Heliopolis, Al-Zaitoun, Cairo, 11737, Egypt', '30.0988484', '31.3175683', 'Salah El Din Citadel, Al Khaskiah Alley, El Hataba, El Giyushi, Cairo, 11636, Egypt', '30.0318455', '31.2604051', 'package-shipments/mkv4AnajpI4MLllS6YvPCwISUt4a91BneGZFMjpY.png', 'Large', '50.00', '80.00', '80.00', '1.80', '9.26', '5.00', '46.30', '83.34', 'delivered', 'paid', 'cash', '0.00', 'none', '0.00', '2026-04-23 14:32:30', NULL, '2026-04-23 14:14:05', '2026-04-23 14:32:30', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `package_shipment_assignments`
+--
+
+CREATE TABLE `package_shipment_assignments` (
+  `id` bigint UNSIGNED NOT NULL,
+  `package_shipment_id` bigint UNSIGNED NOT NULL,
+  `delivery_id` bigint UNSIGNED NOT NULL,
+  `status` enum('assigned','picking_up','in_transit','delivered','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'assigned',
+  `assigned_at` timestamp NULL DEFAULT NULL,
+  `picked_up_at` timestamp NULL DEFAULT NULL,
+  `delivered_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `package_shipment_assignments`
+--
+
+INSERT INTO `package_shipment_assignments` (`id`, `package_shipment_id`, `delivery_id`, `status`, `assigned_at`, `picked_up_at`, `delivered_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 'delivered', '2026-04-23 12:15:59', '2026-04-23 12:19:30', '2026-04-23 12:36:01', '2026-04-23 12:15:59', '2026-04-23 12:36:01'),
+(2, 2, 3, 'delivered', '2026-04-23 13:02:33', '2026-04-23 13:02:53', '2026-04-23 13:03:13', '2026-04-23 13:02:33', '2026-04-23 13:03:13'),
+(3, 4, 3, 'delivered', '2026-04-23 13:24:03', '2026-04-23 13:25:55', '2026-04-23 13:27:43', '2026-04-23 13:24:03', '2026-04-23 13:27:43'),
+(4, 5, 3, 'delivered', '2026-04-23 14:29:22', '2026-04-23 14:30:57', '2026-04-23 14:32:30', '2026-04-23 14:29:22', '2026-04-23 14:32:30');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `package_shipment_logs`
+--
+
+CREATE TABLE `package_shipment_logs` (
+  `id` bigint UNSIGNED NOT NULL,
+  `package_shipment_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `to_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payload` json DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `package_shipment_logs`
+--
+
+INSERT INTO `package_shipment_logs` (`id`, `package_shipment_id`, `user_id`, `type`, `from_status`, `to_status`, `payload`, `created_at`, `updated_at`) VALUES
+(1, 1, 25, 'shipment_created', NULL, 'pending', '{\"distance_km\": \"0.66\", \"total_price\": \"3.30\"}', '2026-04-23 11:20:36', '2026-04-23 11:20:36'),
+(2, 1, 26, 'assignment_created', NULL, 'assigned', '{\"delivery_id\": 3}', '2026-04-23 12:15:59', '2026-04-23 12:15:59'),
+(3, 1, 26, 'assignment_status_change', 'assigned', 'picking_up', '{\"assignment_id\": 1}', '2026-04-23 12:19:30', '2026-04-23 12:19:30'),
+(4, 1, 26, 'assignment_status_change', 'picking_up', 'in_transit', '{\"assignment_id\": 1}', '2026-04-23 12:33:31', '2026-04-23 12:33:31'),
+(5, 1, 26, 'shipment_status_change', NULL, 'delivered', '{\"assignment_id\": 1}', '2026-04-23 12:36:01', '2026-04-23 12:36:01'),
+(6, 2, 26, 'shipment_created', NULL, 'pending', '{\"distance_km\": \"0.66\", \"total_price\": \"3.30\"}', '2026-04-23 12:54:40', '2026-04-23 12:54:40'),
+(7, 2, 25, 'payment_change', 'pending', 'paid', '{\"wallet_used\": 0, \"payment_method\": \"cach\"}', '2026-04-23 13:01:20', '2026-04-23 13:01:20'),
+(8, 2, 26, 'assignment_created', NULL, 'assigned', '{\"delivery_id\": 3}', '2026-04-23 13:02:33', '2026-04-23 13:02:33'),
+(9, 2, 26, 'assignment_status_change', 'assigned', 'picking_up', '{\"assignment_id\": 2}', '2026-04-23 13:02:53', '2026-04-23 13:02:53'),
+(10, 2, 26, 'assignment_status_change', 'picking_up', 'in_transit', '{\"assignment_id\": 2}', '2026-04-23 13:03:04', '2026-04-23 13:03:04'),
+(11, 2, 26, 'shipment_status_change', NULL, 'delivered', '{\"assignment_id\": 2}', '2026-04-23 13:03:13', '2026-04-23 13:03:13'),
+(12, 3, 25, 'shipment_created', NULL, 'pending', '{\"distance_km\": \"0.66\", \"total_price\": \"3.30\"}', '2026-04-23 13:16:03', '2026-04-23 13:16:03'),
+(13, 4, 25, 'shipment_created', NULL, 'pending', '{\"distance_km\": \"0.66\", \"total_price\": \"3.30\"}', '2026-04-23 13:19:58', '2026-04-23 13:19:58'),
+(14, 4, 25, 'payment_change', 'pending', 'paid', '{\"wallet_used\": 0, \"payment_method\": \"cach\"}', '2026-04-23 13:20:36', '2026-04-23 13:20:36'),
+(15, 4, 25, 'payment_change', 'pending', 'pending', '{\"wallet_used\": 0, \"payment_method\": \"cash\"}', '2026-04-23 13:22:39', '2026-04-23 13:22:39'),
+(16, 4, 26, 'assignment_created', NULL, 'assigned', '{\"delivery_id\": 3}', '2026-04-23 13:24:03', '2026-04-23 13:24:03'),
+(17, 4, 26, 'assignment_status_change', 'assigned', 'picking_up', '{\"assignment_id\": 3}', '2026-04-23 13:25:55', '2026-04-23 13:25:55'),
+(18, 4, 26, 'assignment_status_change', 'picking_up', 'in_transit', '{\"assignment_id\": 3}', '2026-04-23 13:27:15', '2026-04-23 13:27:15'),
+(19, 4, 26, 'shipment_status_change', NULL, 'delivered', '{\"assignment_id\": 3}', '2026-04-23 13:27:43', '2026-04-23 13:27:43'),
+(20, 4, 26, 'payment_change', 'pending', 'paid', '{\"payment_method\": \"cash\", \"confirmed_by_delivery_id\": 3}', '2026-04-23 13:27:43', '2026-04-23 13:27:43'),
+(21, 5, 25, 'shipment_created', NULL, 'pending', '{\"distance_km\": \"9.26\", \"total_price\": \"83.34\"}', '2026-04-23 14:14:05', '2026-04-23 14:14:05'),
+(22, 5, 25, 'payment_change', 'pending', 'pending', '{\"wallet_used\": 0, \"payment_method\": \"cash\"}', '2026-04-23 14:19:08', '2026-04-23 14:19:08'),
+(23, 5, 26, 'assignment_created', NULL, 'assigned', '{\"delivery_id\": 3}', '2026-04-23 14:29:22', '2026-04-23 14:29:22'),
+(24, 5, 26, 'assignment_status_change', 'assigned', 'picking_up', '{\"assignment_id\": 4}', '2026-04-23 14:30:57', '2026-04-23 14:30:57'),
+(25, 5, 26, 'assignment_status_change', 'picking_up', 'in_transit', '{\"assignment_id\": 4}', '2026-04-23 14:31:39', '2026-04-23 14:31:39'),
+(26, 5, 26, 'shipment_status_change', NULL, 'delivered', '{\"assignment_id\": 4}', '2026-04-23 14:32:30', '2026-04-23 14:32:30'),
+(27, 5, 26, 'payment_change', 'pending', 'paid', '{\"payment_method\": \"cash\", \"confirmed_by_delivery_id\": 3}', '2026-04-23 14:32:30', '2026-04-23 14:32:30');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `package_sizes`
+--
+
+CREATE TABLE `package_sizes` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `height_cm` decimal(8,2) NOT NULL,
+  `width_cm` decimal(8,2) NOT NULL,
+  `length_cm` decimal(8,2) NOT NULL,
+  `size_multiplier` decimal(8,2) NOT NULL DEFAULT '1.00',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `sort_order` int UNSIGNED NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `package_sizes`
+--
+
+INSERT INTO `package_sizes` (`id`, `name`, `height_cm`, `width_cm`, `length_cm`, `size_multiplier`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, 'Small', '20.00', '30.00', '30.00', '1.00', 1, 1, '2026-04-23 10:51:37', '2026-04-23 10:51:56'),
+(2, 'Medium', '20.00', '40.00', '50.00', '1.30', 1, 2, '2026-04-23 10:52:26', '2026-04-23 10:52:26'),
+(3, 'Large', '50.00', '80.00', '80.00', '1.80', 1, 3, '2026-04-23 10:52:50', '2026-04-23 10:52:50');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_reset_tokens`
 --
 
 CREATE TABLE `password_reset_tokens` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `token` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1025,9 +1206,9 @@ INSERT INTO `password_reset_tokens` (`id`, `email`, `phone`, `token`, `expires_a
 --
 
 CREATE TABLE `permissions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `guard_name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1073,12 +1254,12 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 --
 
 CREATE TABLE `personal_access_tokens` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) NOT NULL,
-  `tokenable_id` bigint(20) UNSIGNED NOT NULL,
-  `name` text NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `abilities` text DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint UNSIGNED NOT NULL,
+  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1099,7 +1280,16 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (7, 'App\\Models\\User', 20, 'auth-token', '275bbd559997eb551ab7c56fc4250a955c50e57fa068060956c5ce420f53a655', '[\"*\"]', NULL, NULL, '2026-03-23 10:17:17', '2026-03-23 10:17:17'),
 (8, 'App\\Models\\User', 20, 'auth-token', 'cac8ed901e176287fe2a20c98900c36cce0e6f6dedda27bd14f8d85524d957db', '[\"*\"]', '2026-03-23 10:20:01', NULL, '2026-03-23 10:17:34', '2026-03-23 10:20:01'),
 (9, 'App\\Models\\User', 24, 'auth-token', 'a361fd7c5f7fa47fb22a803285d0f08125116b0f637fa715bc43436c133cd4aa', '[\"*\"]', '2026-03-23 13:24:15', NULL, '2026-03-23 10:19:54', '2026-03-23 13:24:15'),
-(10, 'App\\Models\\User', 20, 'auth-token', 'f4a7f0e59d448d65efd9a28f020f1d180fe35f54d0ccbac31c7b9e7fc817a3ca', '[\"*\"]', '2026-03-23 12:01:24', NULL, '2026-03-23 11:21:13', '2026-03-23 12:01:24');
+(10, 'App\\Models\\User', 20, 'auth-token', 'f4a7f0e59d448d65efd9a28f020f1d180fe35f54d0ccbac31c7b9e7fc817a3ca', '[\"*\"]', '2026-03-23 12:01:24', NULL, '2026-03-23 11:21:13', '2026-03-23 12:01:24'),
+(11, 'App\\Models\\User', 25, 'auth-token', 'd137257d2e3776872a5f1a5497078c6d17632b76313f670d15752c0e135283bd', '[\"*\"]', '2026-04-23 11:27:12', NULL, '2026-04-23 11:08:50', '2026-04-23 11:27:12'),
+(12, 'App\\Models\\User', 25, 'auth-token', 'd2d84375eb40e088eb3e71d7050970e8ad10133c4b87e93d997f9cd38a36e070', '[\"*\"]', NULL, NULL, '2026-04-23 11:36:54', '2026-04-23 11:36:54'),
+(13, 'App\\Models\\User', 26, 'auth-token', '03317debb156f5c0fdf31d66947c8b74abf4a7ca63877ac2cca7acb7e9541beb', '[\"*\"]', '2026-04-23 14:40:11', NULL, '2026-04-23 11:39:29', '2026-04-23 14:40:11'),
+(14, 'App\\Models\\User', 25, 'auth-token', 'ecc7b1c5186cfcce535b6d78bb162c4f94a8e40fb85d08372c67d72924223ef3', '[\"*\"]', '2026-04-23 14:19:08', NULL, '2026-04-23 12:59:33', '2026-04-23 14:19:08'),
+(15, 'App\\Models\\User', 31, 'auth-token', '194cc7af8d019cd287187bb5fa686f88e485fa87634ebc3c3256d864efdb3bd1', '[\"*\"]', NULL, NULL, '2026-05-09 09:44:38', '2026-05-09 09:44:38'),
+(16, 'App\\Models\\User', 31, 'auth-token', 'f921461f3a21d99bc7fbdbf81f466e623b1c769b8c13b10d2ec0d85078d07dd3', '[\"*\"]', '2026-05-09 09:53:23', NULL, '2026-05-09 09:50:46', '2026-05-09 09:53:23'),
+(17, 'App\\Models\\User', 31, 'auth-token', '4bebe4efc4520deccdabca4cf3a53b5223f3c21a263873648ac4fe022a32b597', '[\"*\"]', NULL, NULL, '2026-05-09 10:00:29', '2026-05-09 10:00:29'),
+(18, 'App\\Models\\User', 31, 'auth-token', '1300f31b7038cbe6a2cbe4244cc88e0f959a6b4cb42283b261664f9ddc7ef496', '[\"*\"]', '2026-05-09 12:12:56', NULL, '2026-05-09 10:01:28', '2026-05-09 12:12:56'),
+(19, 'App\\Models\\User', 3, 'auth-token', '03dd5741d4b907105c84c665e49dccc49837fe11b0c30f9a40080f29a8d8358d', '[\"*\"]', '2026-05-10 10:41:46', NULL, '2026-05-09 12:14:32', '2026-05-10 10:41:46');
 
 -- --------------------------------------------------------
 
@@ -1108,29 +1298,29 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 --
 
 CREATE TABLE `plans` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `slug` varchar(255) NOT NULL,
-  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`description`)),
+  `id` bigint UNSIGNED NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `duration_days` int(11) NOT NULL DEFAULT 1,
-  `can_feature_products` tinyint(1) NOT NULL DEFAULT 0,
-  `max_products_count` int(11) DEFAULT 0,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `is_featured` tinyint(1) NOT NULL DEFAULT 0,
+  `duration_days` int NOT NULL DEFAULT '1',
+  `can_feature_products` tinyint(1) NOT NULL DEFAULT '0',
+  `max_products_count` int DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_featured` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `plans`
 --
 
 INSERT INTO `plans` (`id`, `name`, `slug`, `description`, `price`, `duration_days`, `can_feature_products`, `max_products_count`, `is_active`, `is_featured`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, '{\"ar\": \"خطة مبدئية\", \"en\": \"Basic Plan\"}', 'basic-plan', '{\"ar\": \"مناسب للبائعين الصغار. ميزات محدودة.\", \"en\": \"Ideal for small vendors. Limited features.\"}', 250.00, 30, 0, 3, 1, 0, '2026-01-12 13:16:34', '2026-01-14 10:32:56', NULL),
-(2, '{\"ar\": \"خطة بريميم\", \"en\": \"Premium Plan\"}', 'premium-plan', '{\"ar\": \"مثالي للبائعين المتوسّعين. يشمل خيار المنتجات المميزة.\", \"en\": \"Perfect for growing vendors. Includes featured products option.\"}', 500.00, 30, 1, 35, 1, 1, '2026-01-12 13:19:52', '2026-01-14 10:33:20', NULL),
-(3, '{\"ar\": \"خطة برو\", \"en\": \"Pro Blan\"}', 'pro-blan', '{\"ar\": \"الأفضل للبائعين الكبار. منتجات غير محدودة وجميع الميزات متاحة.\", \"en\": \"Best for large vendors. Unlimited products and all features included.\"}', 850.00, 30, 1, NULL, 1, 0, '2026-01-12 13:20:43', '2026-01-14 10:33:35', NULL);
+(1, '{\"ar\": \"خطة مبدئية\", \"en\": \"Basic Plan\"}', 'basic-plan', '{\"ar\": \"مناسب للبائعين الصغار. ميزات محدودة.\", \"en\": \"Ideal for small vendors. Limited features.\"}', '250.00', 30, 0, 3, 1, 0, '2026-01-12 13:16:34', '2026-01-14 10:32:56', NULL),
+(2, '{\"ar\": \"خطة بريميم\", \"en\": \"Premium Plan\"}', 'premium-plan', '{\"ar\": \"مثالي للبائعين المتوسّعين. يشمل خيار المنتجات المميزة.\", \"en\": \"Perfect for growing vendors. Includes featured products option.\"}', '500.00', 30, 1, 35, 1, 1, '2026-01-12 13:19:52', '2026-01-14 10:33:20', NULL),
+(3, '{\"ar\": \"خطة برو\", \"en\": \"Pro Blan\"}', 'pro-blan', '{\"ar\": \"الأفضل للبائعين الكبار. منتجات غير محدودة وجميع الميزات متاحة.\", \"en\": \"Best for large vendors. Unlimited products and all features included.\"}', '850.00', 30, 1, NULL, 1, 0, '2026-01-12 13:20:43', '2026-01-14 10:33:35', NULL);
 
 -- --------------------------------------------------------
 
@@ -1139,12 +1329,12 @@ INSERT INTO `plans` (`id`, `name`, `slug`, `description`, `price`, `duration_day
 --
 
 CREATE TABLE `point_transactions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `type` enum('addition','subtraction') NOT NULL,
-  `amount` int(11) NOT NULL,
-  `balance_after` int(11) NOT NULL,
-  `notes` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `type` enum('addition','subtraction') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` int NOT NULL,
+  `balance_after` int NOT NULL,
+  `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1171,42 +1361,43 @@ INSERT INTO `point_transactions` (`id`, `user_id`, `type`, `amount`, `balance_af
 --
 
 CREATE TABLE `products` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `type` enum('simple','variable') NOT NULL DEFAULT 'simple',
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`description`)),
-  `thumbnail` varchar(255) DEFAULT NULL,
-  `sku` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `type` enum('simple','variable') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'simple',
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sku` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `discount` decimal(10,2) DEFAULT NULL,
-  `discount_type` enum('percentage','fixed') DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `is_featured` tinyint(1) NOT NULL DEFAULT 0,
-  `is_new` tinyint(1) NOT NULL DEFAULT 0,
-  `is_approved` tinyint(1) NOT NULL DEFAULT 1,
-  `is_bookable` tinyint(1) NOT NULL DEFAULT 1,
+  `discount_type` enum('percentage','fixed') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_featured` tinyint(1) NOT NULL DEFAULT '0',
+  `is_new` tinyint(1) NOT NULL DEFAULT '0',
+  `is_approved` tinyint(1) NOT NULL DEFAULT '1',
+  `is_bookable` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `vendor_id`, `type`, `name`, `description`, `thumbnail`, `sku`, `slug`, `price`, `discount`, `discount_type`, `is_active`, `is_featured`, `is_new`, `is_approved`, `is_bookable`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 2, 'simple', '{\"ar\": \"دوريتوس\", \"en\": \"Doritos\"}', '{\"ar\": \"إذا كنت مستعداً للتحدي، فاحصل على كيس من رقائق دوريتوس واستعد للتجربة. إنها تجربة جريئة في عالم الوجبات الخفيفة وأكثر.\", \"en\": \"If youre up to the challenge, grab a bag of DORITOS chips and get ready for the experience. Its a bold experience in snacking and beyond.\"}', 'products/9YrSXTaHJwWGnJ0X1e8F8TBmjC8dwVR1Dw7HmK3V.jpg', 'CH-123', 'doritos', 10.00, 0.00, 'percentage', 1, 0, 0, 1, 0, '2026-01-13 14:53:34', '2026-01-13 14:53:34', NULL),
-(6, 2, 'variable', '{\"ar\": \"كاندي\", \"en\": \"Candy\"}', '{\"ar\": \"تُتيح لك حلوى نيردز تجربة حسية مميزة. استمتع بتناولها، أو احتفظ بها في مكتبك لتنشيط نفسك، أو قدمها كحلوى في حفلاتك لإسعاد الصغار والكبار. اختر من بين حلوى نيردز الأصلية، أو نيردز روب، أو نيردز غامي كلاستر، أو نيردز جوسي غامي كلاستر. مع نكهات متنوعة من الحلو إلى اللاذع، جرب جميع الأنواع!\", \"en\": \"candies take you on a sensory adventure. Eat them yourself, keep them at the office for a pick-me-up or as your party candy to make kids and adults happy. Choose from original NERDS candy, NERDS Rope, NERDS Gummy Clusters or our NERDS Juicy Gummy Clusters. With flavors ranging from sweet to tangy, try out all the varieties!\"}', 'products/X02YJZCmx7WvFmSOmdllrpCo7QmYyfrSER1bc5GS.jpg', 'CA-120', 'candy', 0.00, 0.00, 'percentage', 1, 0, 0, 1, 0, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
-(7, 3, 'variable', '{\"ar\": \"هوهوز\", \"en\": \"Hohos\"}', '{\"ar\": \"هوهوز كينج كيك ملفوف شوكولاتة بالكريمة، 60 غرام متوفر ويباع على طلبات عن طريق طلبات مارت، مع خدمة توصيل لكافة أنحاء Egypt وفي أقل من دقيقة. تسوق أونلاين الآن وتمتع بخدمة توصيل البقالة السريعة.\", \"en\": \"HoHo\'s King Cake Chocolate Cream Roll, 60g, is available and sold on Talabat through Talabat Mart, with delivery across Egypt in under a minute. Shop online now and enjoy fast grocery delivery.\"}', 'products/fTOk4dIRNoULDoWjs9NPk9x8VnbXnHJS9EsaCeJi.webp', 'HO-123', 'hohos', 0.00, 0.00, 'percentage', 1, 1, 1, 1, 0, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
-(8, 12, 'simple', '{\"ar\": \"منتج تجريبي\", \"en\": \"Test Product\"}', '{\"ar\": null}', NULL, 'TES-123', 'test-product', 350.00, 15.00, 'percentage', 1, 0, 0, 1, 0, '2026-01-14 12:21:31', '2026-01-15 09:21:28', NULL),
-(9, 12, 'simple', '{\"ar\": \"منتج تجريبي 2\", \"en\": \"Test Product 2\"}', '{\"ar\": null}', NULL, 'TES-121', 'test-product-2', 300.00, 10.00, 'percentage', 0, 0, 0, 0, 0, '2026-01-14 12:38:43', '2026-01-14 12:40:48', NULL),
-(10, 13, 'simple', '{\"ar\": \"نسكافية جولد 190 جرام\", \"en\": \"Nescafe Gold - 190 g\"}', '{\"ar\": \"نسكافيه جولد 190 جم قهوة فاخرة مصنوعة من أجود أنواع حبوب البن المختارة بعناية،\\r\\nتتميز بمذاق غني وناعم ورائحة مميزة تمنحك تجربة قهوة راقية في كل كوب.\\r\\n\\r\\nسواء كنت تفضلها سادة أو بالحليب، نسكافيه جولد هي الاختيار المثالي لعشاق القهوة المميزة.\", \"en\": \"Nescafé Gold 190g offers a rich, smooth, and aromatic coffee experience made from carefully selected premium coffee beans.\\r\\nIts well-balanced flavor and refined taste make it perfect for coffee lovers who enjoy a high-quality cup every time.\\r\\n\\r\\nWhether you prefer it black or with milk, Nescafé Gold delivers a satisfying and elegant coffee moment.\"}', 'products/Lioc9Z8E4kb9xm5nmyKqKJI4Jg3vMvxJyO6ZWsOZ.webp', 'NS-012', 'nescafe-gold-190-g', 440.00, 20.00, 'fixed', 1, 1, 0, 1, 0, '2026-01-15 10:46:23', '2026-01-15 10:46:42', NULL),
-(11, 13, 'variable', '{\"ar\": \"نيدو لبن بودر\", \"en\": \"Nido Powdered Milk\"}', '{\"ar\": \"حليب نيدو المجفف هو خيار مثالي للعائلة، يتميز بطعم غني وقيمة غذائية عالية. غني بالكالسيوم والبروتينات والفيتامينات الأساسية التي تساعد على تقوية العظام ودعم النمو الصحي. يمكن استخدامه في تحضير المشروبات الساخنة، الحلويات، أو إضافته للوصفات اليومية بسهولة.\", \"en\": \"Nido Powdered Milk is a nutritious and delicious choice for the whole family. It is rich in calcium, protein, and essential vitamins that support strong bones and healthy growth. Perfect for hot drinks, desserts, or everyday recipes, Nido offers a creamy taste and easy preparation.\"}', 'products/dLRFQznTyk26GnNgafkCdZDfpjXUNbRM4R1sUdon.webp', 'MI-120', 'nido-powdered-milk', 0.00, 10.00, 'percentage', 1, 1, 0, 1, 0, '2026-01-18 10:37:46', '2026-01-18 11:06:47', NULL),
-(14, 13, 'simple', '{\"ar\": \"العبد كوكيز شانكس بالشوكولاتة - 18 قطعة\", \"en\": \"El Abd Chunks Chocolate Cookies - 18 Pieces\"}', '{\"ar\": \"استمتع بالمذاق الغني لـ كوكيز العبد بقطع الشوكولاتة، المخبوزة بعناية والمليئة بقطع الشوكولاتة اللذيذة في كل قضمة. تتميز بقوام مقرمش من الخارج وطري من الداخل، مما يجعلها خيارًا مثاليًا للمشاركة مع العائلة والأصدقاء.\", \"en\": \"Enjoy the rich taste of El Abd Chunks Chocolate Cookies, baked to perfection with generous chocolate chunks in every bite. These delicious cookies offer a crispy texture on the outside and a soft, flavorful inside, making them perfect for sharing with family and friends.\"}', 'products/yfGooOAVAwq61Dj0dc6A95xQsRoFZ5rpKVG6BOoZ.jpg', 'PRD-101', 'el-abd-chunks-chocolate-cookies-18-pieces', 100.00, 5.00, 'fixed', 1, 0, 1, 1, 0, '2026-01-22 12:10:01', '2026-01-22 12:10:02', NULL),
-(15, 13, 'variable', '{\"ar\": \"العبد كوكيز بالشوكولاتة\", \"en\": \"El Abd Chocolate Cookies\"}', '{\"ar\": \"استمتع بالمذاق الغني لـ كوكيز العبد الشوكولاتة، المخبوزة بعناية والمليئة بقطع الشوكولاتة اللذيذة في كل قضمة. تتميز بقوام مقرمش من الخارج وطري من الداخل، مما يجعلها خيارًا مثاليًا للمشاركة مع العائلة والأصدقاء.\", \"en\": \"Enjoy the rich taste of El Abd Chocolate Cookies, baked to perfection with generous chocolate in every bite. These delicious cookies offer a crispy texture on the outside and a soft, flavorful inside, making them perfect for sharing with family and friends.\"}', 'products/Yyvqrv2ABVRy3dxpkHTdNQBL49p6blPdKD9nSnuM.jpg', 'PRD-103', 'el-abd-chocolate-cookies', 0.00, 10.00, 'percentage', 1, 0, 1, 1, 0, '2026-01-22 12:20:40', '2026-03-23 11:22:36', NULL),
-(16, 13, 'variable', '{\"en\":\"Clark Houston\",\"ar\":\"Shaine Townsend\"}', '{\"en\":\"Cupidatat assumenda\",\"ar\":\"Qui officia asperior\"}', 'products/CTRkxB8U3AR3t3FXK3ul0syDZbHNYY5fnYGEPE9Z.png', 'Voluptatem Cupidata', 'Totam et occaecat ul', 0.00, 0.00, 'percentage', 1, 1, 1, 0, 1, '2026-03-23 11:23:57', '2026-03-23 11:23:57', NULL);
+(1, 2, 'simple', '{\"ar\": \"دوريتوس\", \"en\": \"Doritos\"}', '{\"ar\": \"إذا كنت مستعداً للتحدي، فاحصل على كيس من رقائق دوريتوس واستعد للتجربة. إنها تجربة جريئة في عالم الوجبات الخفيفة وأكثر.\", \"en\": \"If youre up to the challenge, grab a bag of DORITOS chips and get ready for the experience. Its a bold experience in snacking and beyond.\"}', 'products/9YrSXTaHJwWGnJ0X1e8F8TBmjC8dwVR1Dw7HmK3V.jpg', 'CH-123', 'doritos', '10.00', '0.00', 'percentage', 1, 0, 0, 1, 0, '2026-01-13 14:53:34', '2026-01-13 14:53:34', NULL),
+(6, 2, 'variable', '{\"ar\": \"كاندي\", \"en\": \"Candy\"}', '{\"ar\": \"تُتيح لك حلوى نيردز تجربة حسية مميزة. استمتع بتناولها، أو احتفظ بها في مكتبك لتنشيط نفسك، أو قدمها كحلوى في حفلاتك لإسعاد الصغار والكبار. اختر من بين حلوى نيردز الأصلية، أو نيردز روب، أو نيردز غامي كلاستر، أو نيردز جوسي غامي كلاستر. مع نكهات متنوعة من الحلو إلى اللاذع، جرب جميع الأنواع!\", \"en\": \"candies take you on a sensory adventure. Eat them yourself, keep them at the office for a pick-me-up or as your party candy to make kids and adults happy. Choose from original NERDS candy, NERDS Rope, NERDS Gummy Clusters or our NERDS Juicy Gummy Clusters. With flavors ranging from sweet to tangy, try out all the varieties!\"}', 'products/X02YJZCmx7WvFmSOmdllrpCo7QmYyfrSER1bc5GS.jpg', 'CA-120', 'candy', '0.00', '0.00', 'percentage', 1, 0, 0, 1, 0, '2026-01-13 15:43:07', '2026-05-09 13:08:35', NULL),
+(7, 3, 'variable', '{\"ar\": \"هوهوز\", \"en\": \"Hohos\"}', '{\"ar\": \"هوهوز كينج كيك ملفوف شوكولاتة بالكريمة، 60 غرام متوفر ويباع على طلبات عن طريق طلبات مارت، مع خدمة توصيل لكافة أنحاء Egypt وفي أقل من دقيقة. تسوق أونلاين الآن وتمتع بخدمة توصيل البقالة السريعة.\", \"en\": \"HoHo\'s King Cake Chocolate Cream Roll, 60g, is available and sold on Talabat through Talabat Mart, with delivery across Egypt in under a minute. Shop online now and enjoy fast grocery delivery.\"}', 'products/fTOk4dIRNoULDoWjs9NPk9x8VnbXnHJS9EsaCeJi.webp', 'HO-123', 'hohos', '0.00', '0.00', 'percentage', 1, 1, 1, 1, 0, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
+(8, 12, 'simple', '{\"ar\": \"منتج تجريبي\", \"en\": \"Test Product\"}', '{\"ar\": null}', NULL, 'TES-123', 'test-product', '350.00', '15.00', 'percentage', 1, 0, 0, 1, 0, '2026-01-14 12:21:31', '2026-01-15 09:21:28', NULL),
+(9, 12, 'simple', '{\"ar\": \"منتج تجريبي 2\", \"en\": \"Test Product 2\"}', '{\"ar\": null}', NULL, 'TES-121', 'test-product-2', '300.00', '10.00', 'percentage', 0, 0, 0, 0, 0, '2026-01-14 12:38:43', '2026-01-14 12:40:48', NULL),
+(10, 13, 'simple', '{\"ar\": \"نسكافية جولد 190 جرام\", \"en\": \"Nescafe Gold - 190 g\"}', '{\"ar\": \"نسكافيه جولد 190 جم قهوة فاخرة مصنوعة من أجود أنواع حبوب البن المختارة بعناية،\\r\\nتتميز بمذاق غني وناعم ورائحة مميزة تمنحك تجربة قهوة راقية في كل كوب.\\r\\n\\r\\nسواء كنت تفضلها سادة أو بالحليب، نسكافيه جولد هي الاختيار المثالي لعشاق القهوة المميزة.\", \"en\": \"Nescafé Gold 190g offers a rich, smooth, and aromatic coffee experience made from carefully selected premium coffee beans.\\r\\nIts well-balanced flavor and refined taste make it perfect for coffee lovers who enjoy a high-quality cup every time.\\r\\n\\r\\nWhether you prefer it black or with milk, Nescafé Gold delivers a satisfying and elegant coffee moment.\"}', 'products/Lioc9Z8E4kb9xm5nmyKqKJI4Jg3vMvxJyO6ZWsOZ.webp', 'NS-012', 'nescafe-gold-190-g', '440.00', '20.00', 'fixed', 1, 1, 0, 1, 0, '2026-01-15 10:46:23', '2026-01-15 10:46:42', NULL),
+(11, 13, 'variable', '{\"ar\": \"نيدو لبن بودر\", \"en\": \"Nido Powdered Milk\"}', '{\"ar\": \"حليب نيدو المجفف هو خيار مثالي للعائلة، يتميز بطعم غني وقيمة غذائية عالية. غني بالكالسيوم والبروتينات والفيتامينات الأساسية التي تساعد على تقوية العظام ودعم النمو الصحي. يمكن استخدامه في تحضير المشروبات الساخنة، الحلويات، أو إضافته للوصفات اليومية بسهولة.\", \"en\": \"Nido Powdered Milk is a nutritious and delicious choice for the whole family. It is rich in calcium, protein, and essential vitamins that support strong bones and healthy growth. Perfect for hot drinks, desserts, or everyday recipes, Nido offers a creamy taste and easy preparation.\"}', 'products/dLRFQznTyk26GnNgafkCdZDfpjXUNbRM4R1sUdon.webp', 'MI-120', 'nido-powdered-milk', '0.00', '10.00', 'percentage', 1, 1, 0, 1, 0, '2026-01-18 10:37:46', '2026-01-18 11:06:47', NULL),
+(14, 13, 'simple', '{\"ar\": \"العبد كوكيز شانكس بالشوكولاتة - 18 قطعة\", \"en\": \"El Abd Chunks Chocolate Cookies - 18 Pieces\"}', '{\"ar\": \"استمتع بالمذاق الغني لـ كوكيز العبد بقطع الشوكولاتة، المخبوزة بعناية والمليئة بقطع الشوكولاتة اللذيذة في كل قضمة. تتميز بقوام مقرمش من الخارج وطري من الداخل، مما يجعلها خيارًا مثاليًا للمشاركة مع العائلة والأصدقاء.\", \"en\": \"Enjoy the rich taste of El Abd Chunks Chocolate Cookies, baked to perfection with generous chocolate chunks in every bite. These delicious cookies offer a crispy texture on the outside and a soft, flavorful inside, making them perfect for sharing with family and friends.\"}', 'products/yfGooOAVAwq61Dj0dc6A95xQsRoFZ5rpKVG6BOoZ.jpg', 'PRD-101', 'el-abd-chunks-chocolate-cookies-18-pieces', '100.00', '5.00', 'fixed', 1, 0, 1, 1, 0, '2026-01-22 12:10:01', '2026-01-22 12:10:02', NULL),
+(15, 13, 'variable', '{\"ar\": \"العبد كوكيز بالشوكولاتة\", \"en\": \"El Abd Chocolate Cookies\"}', '{\"ar\": \"استمتع بالمذاق الغني لـ كوكيز العبد الشوكولاتة، المخبوزة بعناية والمليئة بقطع الشوكولاتة اللذيذة في كل قضمة. تتميز بقوام مقرمش من الخارج وطري من الداخل، مما يجعلها خيارًا مثاليًا للمشاركة مع العائلة والأصدقاء.\", \"en\": \"Enjoy the rich taste of El Abd Chocolate Cookies, baked to perfection with generous chocolate in every bite. These delicious cookies offer a crispy texture on the outside and a soft, flavorful inside, making them perfect for sharing with family and friends.\"}', 'products/Yyvqrv2ABVRy3dxpkHTdNQBL49p6blPdKD9nSnuM.jpg', 'PRD-103', 'el-abd-chocolate-cookies', '0.00', '10.00', 'percentage', 1, 0, 1, 1, 0, '2026-01-22 12:20:40', '2026-03-23 11:22:36', NULL),
+(16, 13, 'variable', '{\"en\":\"Clark Houston\",\"ar\":\"Shaine Townsend\"}', '{\"en\":\"Cupidatat assumenda\",\"ar\":\"Qui officia asperior\"}', 'products/CTRkxB8U3AR3t3FXK3ul0syDZbHNYY5fnYGEPE9Z.png', 'Voluptatem Cupidata', 'Totam et occaecat ul', '0.00', '0.00', 'percentage', 1, 1, 1, 0, 1, '2026-03-23 11:23:57', '2026-03-23 11:23:57', NULL),
+(19, 2, 'variable', '{\"en\":\"Premium Coffee Bundle\",\"ar\":\"باقة قهوة مميزة\"}', '{\"en\":\"Fresh roasted coffee bundle with multiple size and roast options.\",\"ar\":\"باقة قهوة محمصة طازجة مع خيارات متعددة للحجم والتحميص\"}', 'products/23wU9goH3WnJNQRoZ4X8Lde6OqNo281GeYUZymFs.png', 'COFFEE-BUNDLE-002', 'premium-coffee-bundle', '0.00', '1.00', 'percentage', 1, 1, 1, 0, 1, '2026-05-10 07:01:18', '2026-05-10 07:05:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -1215,10 +1406,10 @@ INSERT INTO `products` (`id`, `vendor_id`, `type`, `name`, `description`, `thumb
 --
 
 CREATE TABLE `product_images` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `imageable_id` bigint(20) UNSIGNED NOT NULL,
-  `imageable_type` varchar(255) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `imageable_id` bigint UNSIGNED NOT NULL,
+  `imageable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1248,7 +1439,9 @@ INSERT INTO `product_images` (`id`, `imageable_id`, `imageable_type`, `path`, `c
 (61, 15, 'App\\Models\\Product', 'products/J4Jnrm9ZltrU1sB0023XxhbsqQxhEnQbx0kZBoEw.jpg', '2026-01-22 12:20:41', '2026-01-22 12:20:41'),
 (62, 15, 'App\\Models\\Product', 'products/rNDh49frgMpMhrKUcjeV46X4d4FsDJtJk3nFD5Qo.jpg', '2026-01-22 12:20:41', '2026-01-22 12:20:41'),
 (63, 15, 'App\\Models\\Product', 'products/iZfgKzRxtPo7lBdPmnZt5N7BiNUMPdyzJsMonXRa.jpg', '2026-01-22 12:20:42', '2026-01-22 12:20:42'),
-(72, 15, 'App\\Models\\Product', 'products/QDKHQIPqDI0RlnhvDFBCWObpKA9BZgf6Qo8oQbRn.webp', '2026-01-22 12:57:15', '2026-01-22 12:57:15');
+(72, 15, 'App\\Models\\Product', 'products/QDKHQIPqDI0RlnhvDFBCWObpKA9BZgf6Qo8oQbRn.webp', '2026-01-22 12:57:15', '2026-01-22 12:57:15'),
+(82, 19, 'App\\Models\\Product', 'products/34kFfTZybArHibc8gGbESNijVTfQiN2kCmYpJHRG.png', '2026-05-10 07:05:59', '2026-05-10 07:05:59'),
+(83, 19, 'App\\Models\\Product', 'products/zDsnE80SbCrSs2Vj6O6GDVGMFbO7evFSZa1c84Zp.png', '2026-05-10 07:05:59', '2026-05-10 07:05:59');
 
 -- --------------------------------------------------------
 
@@ -1257,12 +1450,12 @@ INSERT INTO `product_images` (`id`, `imageable_id`, `imageable_type`, `path`, `c
 --
 
 CREATE TABLE `product_ratings` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `rating` tinyint(3) UNSIGNED NOT NULL,
-  `comment` text DEFAULT NULL,
-  `is_visible` tinyint(1) NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `rating` tinyint UNSIGNED NOT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci,
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1281,10 +1474,10 @@ INSERT INTO `product_ratings` (`id`, `product_id`, `user_id`, `rating`, `comment
 --
 
 CREATE TABLE `product_relations` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `related_product_id` bigint(20) UNSIGNED NOT NULL,
-  `type` enum('related','cross_sell','up_sell','upsell') NOT NULL DEFAULT 'related',
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `related_product_id` bigint UNSIGNED NOT NULL,
+  `type` enum('related','cross_sell','up_sell','upsell') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'related',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1311,13 +1504,13 @@ INSERT INTO `product_relations` (`id`, `product_id`, `related_product_id`, `type
 --
 
 CREATE TABLE `product_reports` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `reason` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'pending',
-  `handled_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `reason` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `handled_by` bigint UNSIGNED DEFAULT NULL,
   `handled_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1338,39 +1531,41 @@ INSERT INTO `product_reports` (`id`, `product_id`, `user_id`, `reason`, `descrip
 --
 
 CREATE TABLE `product_variants` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `sku` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `thumbnail` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `sku` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `discount` decimal(10,2) DEFAULT NULL,
-  `discount_type` enum('percentage','fixed') NOT NULL DEFAULT 'percentage',
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `discount_type` enum('percentage','fixed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'percentage',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `product_variants`
 --
 
 INSERT INTO `product_variants` (`id`, `product_id`, `name`, `sku`, `slug`, `thumbnail`, `price`, `discount`, `discount_type`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(4, 6, '{\"ar\": \"كاندي بالبطيخ صغيرة\", \"en\": \"Watermelon Candy S\"}', 'CA-120-red-s', 'watermelon-candy-s', 'products/variants/J7J12Ma1YFYH8GlgLNgbBAJm85ovIRgXr2iemS80.jpg', 45.00, NULL, 'percentage', 1, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
-(5, 6, '{\"ar\": \"كاندي بالبطيخ وسط\", \"en\": \"Watermelon Candy M\"}', 'CA-120-red-m', 'watermelon-candy-m', 'products/variants/tVGsahmlx79qGfUf1qsRBxnQcSNtxuzXJVZ6Sh88.jpg', 60.00, NULL, 'percentage', 1, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
-(6, 6, '{\"ar\": \"كاندي بالتفاح الاخضر صغيرة\", \"en\": \"Green Apple Candy S\"}', 'CA-120-green-s', 'green-apple-candy-s', 'products/variants/fkNHWPxVP1ljp00pXiu2TqMYHwiKpVPh8Kso8FlF.jpg', 45.00, NULL, 'percentage', 1, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
-(7, 6, '{\"ar\": \"كاندي بالتفاح الاخضر وسط\", \"en\": \"Green Apple Candy M\"}', 'CA-120-green-m', 'green-apple-candy-m', 'products/variants/4z2vw7xXiFaOJU1yqJizE3SnNNVodP4PEgRtinq6.jpg', 60.00, NULL, 'percentage', 1, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
-(8, 7, '{\"ar\": \"هوهوز بالشيكولاتة صغيرة\", \"en\": \"Chocolate Hohos  S\"}', 'HO-123-red-s', 'chocolate-hohos-s', 'products/variants/JqJxLtlYzAp2l9PgBIDHbGbvUVtFSdDkQr91V3d6.webp', 10.00, NULL, 'percentage', 1, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
-(9, 7, '{\"ar\": \"هوهوز بالشيكولاتة وسط\", \"en\": \"Chocolate Hohos  M\"}', 'HO-123-red-m', 'chocolate-hohos-m', 'products/variants/9NcrtLYKxT8KS8c1dgJRcHkwjP3oyxSM7keVrE4d.webp', 15.00, NULL, 'percentage', 1, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
-(10, 7, '{\"ar\": \"هوهوز بالقهوة صغيرة\", \"en\": \"Coffee Hohos  S\"}', 'HO-123-green-s', 'coffee-hohos-s', 'products/variants/ZPTQ4yE8KJkbQ0VC8zG1y624D3wCXnn92Yp9Tn4W.jpg', 10.00, NULL, 'percentage', 1, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
-(11, 7, '{\"ar\": \"هوهوز بالقهوة وسط\", \"en\": \"Coffee Hohos  M\"}', 'HO-123-green-m', 'coffee-hohos-m', 'products/variants/r45Xj222MOG4HfSLq4viLI8AXIc4oTOPuknKd6P9.jpg', 15.00, NULL, 'percentage', 1, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
-(12, 11, '{\"ar\": \"نيدو لبن بودر 100 جم\", \"en\": \"Nido Powdered Milk 100g\"}', 'MI-120-s', 'nido-powdered-milk-100g', 'products/variants/SeoVR3Tk4WrL2AgLIPDgITi4tCOK29FvXT4qQgAX.webp', 45.00, NULL, 'percentage', 1, '2026-01-18 10:37:46', '2026-01-18 11:06:30', NULL),
-(13, 11, '{\"ar\": \"نيدو لبن بودر 500 جم\", \"en\": \"Nido Powdered Milk 500g\"}', 'MI-120-m', 'nido-powdered-milk-500g', 'products/variants/MD493smL9EOOHrBgUW8wCyAGNYxG3q9dwJRktNNM.webp', 220.00, NULL, 'percentage', 1, '2026-01-18 10:37:46', '2026-01-18 11:06:30', NULL),
-(14, 11, '{\"ar\": \"نيدو لبن بودر 900 + 100 جم\", \"en\": \"Nido Powdered Milk 900+100 g\"}', 'MI-120-l', 'nido-powdered-milk-900100-g', 'products/variants/I9L8SMfqhR7UbctCgjqOzL8iqGBIqMbl28ACr4TO.webp', 400.00, NULL, 'percentage', 1, '2026-01-18 10:37:46', '2026-01-18 11:06:30', NULL),
-(28, 15, '{\"ar\": \"كوكيز شوكولاتة العبد - 2 قطعة\", \"en\": \"El Abd Chocolate Cookies - 2 Pieces\"}', 'PRD-103-s', 'el-abd-chocolate-cookies-2-pieces', 'products/variants/dEkSdxdiZMKVKc4dt6NBtvq3VFOerMOULd9XTotQ.webp', 15.00, NULL, 'percentage', 1, '2026-01-22 14:58:04', '2026-01-22 15:25:11', NULL),
-(29, 15, '{\"ar\": \"كوكيز شوكولاتة العبد - 6 قطعة\", \"en\": \"El Abd Chocolate Cookies - 6 Pieces\"}', 'PRD-103-m', 'el-abd-chocolate-cookies-6-pieces', 'products/variants/IwpCAnKmewPcvJdsV8r7ShouOqYX7Vf8NZYkTxNQ.webp', 25.00, NULL, 'percentage', 1, '2026-01-22 14:58:04', '2026-01-22 15:25:11', NULL);
+(4, 6, '{\"ar\": \"كاندي بالبطيخ صغيرة\", \"en\": \"Watermelon Candy S\"}', 'CA-120-red-s', 'watermelon-candy-s', 'products/variants/J7J12Ma1YFYH8GlgLNgbBAJm85ovIRgXr2iemS80.jpg', '45.00', NULL, 'percentage', 1, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
+(5, 6, '{\"ar\": \"كاندي بالبطيخ وسط\", \"en\": \"Watermelon Candy M\"}', 'CA-120-red-m', 'watermelon-candy-m', 'products/variants/tVGsahmlx79qGfUf1qsRBxnQcSNtxuzXJVZ6Sh88.jpg', '60.00', NULL, 'percentage', 1, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
+(6, 6, '{\"ar\": \"كاندي بالتفاح الاخضر صغيرة\", \"en\": \"Green Apple Candy S\"}', 'CA-120-green-s', 'green-apple-candy-s', 'products/variants/fkNHWPxVP1ljp00pXiu2TqMYHwiKpVPh8Kso8FlF.jpg', '45.00', NULL, 'percentage', 1, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
+(7, 6, '{\"ar\": \"كاندي بالتفاح الاخضر وسط\", \"en\": \"Green Apple Candy M\"}', 'CA-120-green-m', 'green-apple-candy-m', 'products/variants/4z2vw7xXiFaOJU1yqJizE3SnNNVodP4PEgRtinq6.jpg', '60.00', NULL, 'percentage', 1, '2026-01-13 15:43:07', '2026-01-13 15:43:07', NULL),
+(8, 7, '{\"ar\": \"هوهوز بالشيكولاتة صغيرة\", \"en\": \"Chocolate Hohos  S\"}', 'HO-123-red-s', 'chocolate-hohos-s', 'products/variants/JqJxLtlYzAp2l9PgBIDHbGbvUVtFSdDkQr91V3d6.webp', '10.00', NULL, 'percentage', 1, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
+(9, 7, '{\"ar\": \"هوهوز بالشيكولاتة وسط\", \"en\": \"Chocolate Hohos  M\"}', 'HO-123-red-m', 'chocolate-hohos-m', 'products/variants/9NcrtLYKxT8KS8c1dgJRcHkwjP3oyxSM7keVrE4d.webp', '15.00', NULL, 'percentage', 1, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
+(10, 7, '{\"ar\": \"هوهوز بالقهوة صغيرة\", \"en\": \"Coffee Hohos  S\"}', 'HO-123-green-s', 'coffee-hohos-s', 'products/variants/ZPTQ4yE8KJkbQ0VC8zG1y624D3wCXnn92Yp9Tn4W.jpg', '10.00', NULL, 'percentage', 1, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
+(11, 7, '{\"ar\": \"هوهوز بالقهوة وسط\", \"en\": \"Coffee Hohos  M\"}', 'HO-123-green-m', 'coffee-hohos-m', 'products/variants/r45Xj222MOG4HfSLq4viLI8AXIc4oTOPuknKd6P9.jpg', '15.00', NULL, 'percentage', 1, '2026-01-13 16:02:37', '2026-01-13 16:02:37', NULL),
+(12, 11, '{\"ar\": \"نيدو لبن بودر 100 جم\", \"en\": \"Nido Powdered Milk 100g\"}', 'MI-120-s', 'nido-powdered-milk-100g', 'products/variants/SeoVR3Tk4WrL2AgLIPDgITi4tCOK29FvXT4qQgAX.webp', '45.00', NULL, 'percentage', 1, '2026-01-18 10:37:46', '2026-01-18 11:06:30', NULL),
+(13, 11, '{\"ar\": \"نيدو لبن بودر 500 جم\", \"en\": \"Nido Powdered Milk 500g\"}', 'MI-120-m', 'nido-powdered-milk-500g', 'products/variants/MD493smL9EOOHrBgUW8wCyAGNYxG3q9dwJRktNNM.webp', '220.00', NULL, 'percentage', 1, '2026-01-18 10:37:46', '2026-01-18 11:06:30', NULL),
+(14, 11, '{\"ar\": \"نيدو لبن بودر 900 + 100 جم\", \"en\": \"Nido Powdered Milk 900+100 g\"}', 'MI-120-l', 'nido-powdered-milk-900100-g', 'products/variants/I9L8SMfqhR7UbctCgjqOzL8iqGBIqMbl28ACr4TO.webp', '400.00', NULL, 'percentage', 1, '2026-01-18 10:37:46', '2026-01-18 11:06:30', NULL),
+(28, 15, '{\"ar\": \"كوكيز شوكولاتة العبد - 2 قطعة\", \"en\": \"El Abd Chocolate Cookies - 2 Pieces\"}', 'PRD-103-s', 'el-abd-chocolate-cookies-2-pieces', 'products/variants/dEkSdxdiZMKVKc4dt6NBtvq3VFOerMOULd9XTotQ.webp', '15.00', NULL, 'percentage', 1, '2026-01-22 14:58:04', '2026-01-22 15:25:11', NULL),
+(29, 15, '{\"ar\": \"كوكيز شوكولاتة العبد - 6 قطعة\", \"en\": \"El Abd Chocolate Cookies - 6 Pieces\"}', 'PRD-103-m', 'el-abd-chocolate-cookies-6-pieces', 'products/variants/IwpCAnKmewPcvJdsV8r7ShouOqYX7Vf8NZYkTxNQ.webp', '25.00', NULL, 'percentage', 1, '2026-01-22 14:58:04', '2026-01-22 15:25:11', NULL),
+(33, 19, '{\"en\":\"250g / Medium Roast\",\"ar\":\"250 جم / تحميص متوسط\"}', 'COFFEE-BUNDLE-001-250-MED', '250g-medium-roast', 'products/variants/vKWzyN35IKRHkiHzlf4dOXIFujRe1am4feV2V366.png', '145.00', NULL, 'percentage', 1, '2026-05-10 07:01:18', '2026-05-10 07:05:59', NULL),
+(34, 19, '{\"en\":\"500g / Dark Roast\",\"ar\":\"500 جم / تحميص داكن\"}', 'COFFEE-BUNDLE-001-500-DRK', '500g-dark-roast', 'products/variants/9nd0vAja8vyI0SYV5s9WS4NbnI1sWbpAYQMughKR.png', '230.00', NULL, 'percentage', 1, '2026-05-10 07:01:18', '2026-05-10 07:05:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -1379,9 +1574,9 @@ INSERT INTO `product_variants` (`id`, `product_id`, `name`, `sku`, `slug`, `thum
 --
 
 CREATE TABLE `product_variant_values` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `product_variant_id` bigint(20) UNSIGNED NOT NULL,
-  `variant_option_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `product_variant_id` bigint UNSIGNED NOT NULL,
+  `variant_option_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1411,7 +1606,11 @@ INSERT INTO `product_variant_values` (`id`, `product_variant_id`, `variant_optio
 (18, 13, 5, '2026-01-18 10:37:46', '2026-01-18 10:37:46'),
 (19, 14, 6, '2026-01-18 10:37:46', '2026-01-18 10:37:46'),
 (22, 28, 4, '2026-01-22 15:25:11', '2026-01-22 15:25:11'),
-(23, 29, 5, '2026-01-22 15:25:11', '2026-01-22 15:25:11');
+(23, 29, 5, '2026-01-22 15:25:11', '2026-01-22 15:25:11'),
+(36, 33, 4, '2026-05-10 07:05:59', '2026-05-10 07:05:59'),
+(37, 33, 5, '2026-05-10 07:05:59', '2026-05-10 07:05:59'),
+(38, 34, 4, '2026-05-10 07:05:59', '2026-05-10 07:05:59'),
+(39, 34, 5, '2026-05-10 07:05:59', '2026-05-10 07:05:59');
 
 -- --------------------------------------------------------
 
@@ -1420,9 +1619,9 @@ INSERT INTO `product_variant_values` (`id`, `product_variant_id`, `variant_optio
 --
 
 CREATE TABLE `roles` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `guard_name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1444,8 +1643,8 @@ INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VAL
 --
 
 CREATE TABLE `role_has_permissions` (
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `role_id` bigint(20) UNSIGNED NOT NULL
+  `permission_id` bigint UNSIGNED NOT NULL,
+  `role_id` bigint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1455,12 +1654,12 @@ CREATE TABLE `role_has_permissions` (
 --
 
 CREATE TABLE `sessions` (
-  `id` varchar(255) NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `ip_address` varchar(45) DEFAULT NULL,
-  `user_agent` text DEFAULT NULL,
-  `payload` text NOT NULL,
-  `last_activity` int(11) NOT NULL
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_activity` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1468,32 +1667,17 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('1O3h8Zxz0ynLXqv6TkvBT5t9ZqSnfbOqIeVHU9tH', NULL, '74.7.241.58', 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.3; +https://openai.com/gptbot)', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiaVFZSzBVM1dDa0gwclFSVnhGS0doak54VFZSVFA3SGdHUGNCcmRtQyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzU6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZS9wcmljaW5nIjtzOjU6InJvdXRlIjtzOjE1OiJsYW5kaW5nLnByaWNpbmciO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjY6ImxvY2FsZSI7czoyOiJlbiI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9fQ==', 1775435108),
-('4nLzULbUx8RFpJgQEk3SKCGh7xWTYCgzJ0pJzLej', NULL, '41.41.21.7', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiY2s3Zk15c2VEQTlsZVVsNnAzYllTYTM0U2lpdnZtRDJZYlZXUUFNSSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzM6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZS9sb2dpbiI7czo1OiJyb3V0ZSI7czo1OiJsb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1775065330),
-('7iU6HL843W20PqPvDQ4mGpwMFf7RxN73LimeTdpH', NULL, '74.7.243.223', 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.3; +https://openai.com/gptbot)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZElIbXF1clZJOGtGNnRjcG5sZmd1VW1HbmpuYkhhTEM1UzBZMDF0WSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDc6Imh0dHBzOi8vd3d3Lnpldy5iYWNrZW5kcHJvLnNpdGUvdmVuZG9yL3JlZ2lzdGVyIjtzOjU6InJvdXRlIjtzOjE1OiJ2ZW5kb3IucmVnaXN0ZXIiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775583971),
-('a37AVCL64rw11GHt0Md8sGLhnCOEgMf5eyNxPp6P', NULL, '206.189.20.212', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiSDJyS0l4SUwwUUlBWkVzMm1CRVBVcjJjaHh3UFlZNHg4c083aDZtUCI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775726651),
-('AU3iZ9PviQGnuxjB9zsbwMtM7scwBACZg0ibffL0', NULL, '92.118.39.126', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) SecurityScanner/2.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiYUlZSVNrd1JjMEkwc2lwRW1WU21QYzhod1BINTBuSVd3TENuNm1lQSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775114436),
-('ExXqU0rF5ImV9Tqkgm2R9hIEOjDm8a3R2jyX41Em', NULL, '195.178.110.64', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoieEpReml0cW5RVnozSkVnQTR2dkowWG5USnIxdUlvY2x3UGZxS0xWZyI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHBzOi8vd3d3Lnpldy5iYWNrZW5kcHJvLnNpdGUiO3M6NToicm91dGUiO3M6OToiZGFzaGJvYXJkIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1775392711),
-('GQxoNyJ5V8uZ5ytyOjOeUMwooWDPmuVVsgbIjB8b', NULL, '205.210.31.39', 'Hello from Palo Alto Networks, find out more about our scans in https://docs-cortex.paloaltonetworks.com/r/1/Cortex-Xpanse/Scanning-activity', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiU21RSTB2ZkczUjJUNzNJRmJPazR2MFdhV0k2Wm9OS1Q5YnFaRFN3byI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly93d3cuemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775572584),
-('iKuriz8w0gB1VgTi2JFuR34Uo57EyzcbK1NegwjG', NULL, '167.94.146.57', 'Mozilla/5.0 (compatible; CensysInspect/1.1; +https://about.censys.io/)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZ3ZXYktsc1Z0VUxaZ1VpMER6M0g5WlZHZTVKYnM5a1pqZjQ2Tm9SUSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775636175),
-('J5xRb3vbCuVXnm4TaVb10UQtxSPjL9Z02oTlmcIH', NULL, '156.204.59.76', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiek5QWG1aWkRTYkFncmRlbjNINXo0U3dvd210emhSQXdnMVNoT016ZSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly96ZXcuYmFja2VuZHByby5zaXRlIjtzOjU6InJvdXRlIjtzOjk6ImRhc2hib2FyZCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1775662639),
-('j6hQySxkTNrT5RCosgS4loEIUMYQyFCh92hjYHIL', NULL, '44.250.145.68', 'Mozilla/5.0 (compatible; wpbot/1.4; +https://forms.gle/ajBaxygz9jSR8p8G9)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZTRRVnNpdDJJNW9RbmgwWjZtWDMybGNjbzVSVWM3NWxxaFlXelhFNCI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHBzOi8vd3d3Lnpldy5iYWNrZW5kcHJvLnNpdGUiO3M6NToicm91dGUiO3M6OToiZGFzaGJvYXJkIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1775690273),
-('jodqUi60yChwy1CXSl6dd8T6dT2avUjTZom2bRgX', NULL, '167.94.146.57', 'Mozilla/5.0 (compatible; CensysInspect/1.1; +https://about.censys.io/)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZjRHalBubG5YQjZybUFUcTFmWmFNbnlwOGU1ZWRQVXZFZ3BpTlZQTyI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775636192),
-('KN4OBhVtPVHw5F4PulJjotT3pZO57E610k2FjXQ6', NULL, '92.118.39.126', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) SecurityScanner/2.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUmZLVDhmOUcyVU5OY2xYaGxRVjh2ekxURm9aQ0FjS3BjZEVNck5KUyI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHBzOi8vd3d3Lnpldy5iYWNrZW5kcHJvLnNpdGUiO3M6NToicm91dGUiO3M6OToiZGFzaGJvYXJkIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1775114436),
-('Ku0nsA3N9vtHHCXFgLiPJDgNgqPP3OVEoTkn2aaz', NULL, '204.76.203.25', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.3', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoidE5sMHRNNmYyMlM3Q2ZTT1RBaE1JNkpIWG9aS1dpUzZzZ0JValkzUiI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775355150),
-('lw5JWHoBjGtInS070eulWi7MbTCV8D16Rv36h5S9', NULL, '3.18.186.238', 'visionheight.com/scan Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/126.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiQWJLS0VqN1ZEVGFUZlpUbkd3MDFVWW9BcU1Kdktza0hrNzBvTWRObSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly96ZXcuYmFja2VuZHByby5zaXRlIjtzOjU6InJvdXRlIjtzOjk6ImRhc2hib2FyZCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1775470221),
-('m6RIJ9sB25eorVUmOFvUgfnVWCo2GiUevw1VYwBX', NULL, '18.235.110.182', 'RecordedFuture Global Inventory Crawler', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVFM2T1owbXF4Yjg2S1pZeTF5aWZRMXhRUGp6aXdRaE1lVzNsUXlwZSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775544222),
-('mCCfuS7TKS0bGnSEAf3csDu1gJ20yaT7qCnN8yxF', 1, '156.204.59.76', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiMzVEczlzbjE1emQxNWJ3NnpyN3pkZkZ1cE0xcjlNREVjaWZKR2kzUCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjQ2OiJodHRwczovL3pldy5iYWNrZW5kcHJvLnNpdGUvYWRtaW4vem9uZXMvY3JlYXRlIjtzOjU6InJvdXRlIjtzOjE4OiJhZG1pbi56b25lcy5jcmVhdGUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6MjI6IlBIUERFQlVHQkFSX1NUQUNLX0RBVEEiO2E6MDp7fX0=', 1775646690),
-('mKAkGwdWSnadsAmMVeOnMThTvHCWZHmFuB5HtaQM', NULL, '41.41.117.61', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoibmlPZ1YzTFFNMXF1ZTFIMFhEcnJ3WlJkaUx5YllMSDhPVWw2TkxJNiI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1776853064),
-('oArB9y6TQA4id6FSxxdFtM4LjjBxKDAesgKed0zh', 16, '156.204.115.253', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiQ3JFd3BLNmp1VTdWakNxWHpseVdza0RDa2cwM3NIRDE2V0U0eGYzRiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjQ5OiJodHRwczovL3pldy5iYWNrZW5kcHJvLnNpdGUvYWRtaW4vcHJvZHVjdHMvaW1wb3J0IjtzOjU6InJvdXRlIjtzOjIxOiJhZG1pbi5wcm9kdWN0cy5pbXBvcnQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxNjtzOjIyOiJQSFBERUJVR0JBUl9TVEFDS19EQVRBIjthOjA6e319', 1775065860),
-('oXQWrO05GV6DaIjvUWyR8tqDxKe4jTve3uqzJoby', 1, '41.41.21.7', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoib3lkMUxmdmQ3amIzZU1jUktuM2xzYVB3bmQ5eVZOT1JRRzVTSTEwTyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDI6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZS9hZG1pbi92YXJpYW50cyI7czo1OiJyb3V0ZSI7czoyMDoiYWRtaW4udmFyaWFudHMuaW5kZXgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6MjI6IlBIUERFQlVHQkFSX1NUQUNLX0RBVEEiO2E6MDp7fX0=', 1775075287),
-('P2lJukYWwYsVEfzmChLkMGUKoHfRId9xpeyE6yNS', NULL, '74.7.227.150', 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.3; +https://openai.com/gptbot)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiR1ZUWGkzdWViWDlUQUt4SUpFZ25yMWRSMnZ2NXJiM20xbll0Q1hsbCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHBzOi8vd3d3Lnpldy5iYWNrZW5kcHJvLnNpdGUiO3M6NToicm91dGUiO3M6OToiZGFzaGJvYXJkIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo2OiJsb2NhbGUiO3M6MjoiZW4iO30=', 1775585728),
-('rNH1Bc17EnaaEc6gkCJmdqoWIc3oHNUZwNGjBkck', NULL, '205.210.31.41', 'Hello from Palo Alto Networks, find out more about our scans in https://docs-cortex.paloaltonetworks.com/r/1/Cortex-Xpanse/Scanning-activity', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZmpVdWVRZ0JnemkwVnpiNnZXcHB6MUtRSlJYbm12ZzhIaHF3TVpSUyI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly96ZXcuYmFja2VuZHByby5zaXRlIjtzOjU6InJvdXRlIjtzOjk6ImRhc2hib2FyZCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1775286653),
-('Rozo6quvVAQNSO1aKX04pryejzR95rSSgW73Ned2', NULL, '156.204.59.76', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiYkwyRHZOcUJieHVmcmJIbXhDTUx2cUM0QzlHQmlVdWl6RVVEY2lVViI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDM6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZS92ZW5kb3IvcmVnaXN0ZXIiO3M6NToicm91dGUiO3M6MTU6InZlbmRvci5yZWdpc3RlciI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1775473535),
-('TEBbTkRG55Fd9IrHRtoo6Vkwhtgt0hftD73CIdUn', NULL, '206.189.20.212', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiWUhzRzkzS1hxWXpqelNDUUpFMlNGWTVtTDJZU0ZKNU5GMkgzRHhtZyI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly96ZXcuYmFja2VuZHByby5zaXRlIjtzOjU6InJvdXRlIjtzOjk6ImRhc2hib2FyZCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1775726650),
-('WNP4DaAZS3MzgxheTJOmDIh3n0Fw843hf4LRMzIL', 1, '102.44.163.199', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoid05ZOTVvRjNJVkkzMkhpOUh1MGh0RUdhS0pyZDZma0lkaUY0Z0g5OCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDI6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZS9hZG1pbi92YXJpYW50cyI7czo1OiJyb3V0ZSI7czoyMDoiYWRtaW4udmFyaWFudHMuaW5kZXgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6MjI6IlBIUERFQlVHQkFSX1NUQUNLX0RBVEEiO2E6MDp7fX0=', 1776521000),
-('Zleaqg9VtFkVTZ8blkgXYIqLb1UOH06ok07iY3Tf', NULL, '198.235.24.37', 'Hello from Palo Alto Networks, find out more about our scans in https://docs-cortex.paloaltonetworks.com/r/1/Cortex-Xpanse/Scanning-activity', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiR2VFZEZIUHNHeVZxZ1RkcDNDMU8wWkRoVjhCbnkzR2J5SUNKaGJHNSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHBzOi8vemV3LmJhY2tlbmRwcm8uc2l0ZSI7czo1OiJyb3V0ZSI7czo5OiJkYXNoYm9hcmQiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1775454014),
-('ZwNE6P50uP4bDz2lxt0Y7oMcKo1G0fw2kqG1s8wU', NULL, '198.235.24.19', 'Hello from Palo Alto Networks, find out more about our scans in https://docs-cortex.paloaltonetworks.com/r/1/Cortex-Xpanse/Scanning-activity', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoicGV2RnNPU1NoTUxDUFhlQWVvaUxkUm9ydXVrTVNMWnRGZ1JuMWNyeSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHBzOi8vd3d3Lnpldy5iYWNrZW5kcHJvLnNpdGUiO3M6NToicm91dGUiO3M6OToiZGFzaGJvYXJkIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1775649785);
+('0Vjm6JkT9Od41XbpUEEhJvGWVtLC0v1V57P0AQdn', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiQkZHYUttdkxUcUQ5OFN1Y3lOS0Zva1Jpcm1SN0ZocGpOM3RlSlMwdSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly96ZXcudGVzdC9sb2dpbiI7czo1OiJyb3V0ZSI7czo1OiJsb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1778409461),
+('czatX1HrzYxZIL9wpf8MMhH4sTOhSmzhLRAQc5wG', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiM0VIRXp6MlZNV3YwTHJFY0l3NXpWd0Fkb09ibnRKcXlGd2paVjZTUiI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozNDoiaHR0cDovL3pldy50ZXN0L3ZlbmRvci9wcm9kdWN0cy8xNyI7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjM0OiJodHRwOi8vemV3LnRlc3QvdmVuZG9yL3Byb2R1Y3RzLzE3IjtzOjU6InJvdXRlIjtzOjIwOiJ2ZW5kb3IucHJvZHVjdHMuc2hvdyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1778409461),
+('gcTQ3szwp8Tm4MGwhbX7R9bMvnyMkrUDExDBvwmE', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiTzdzOWMwY01PaFo1ZHdUOHNNdDhWU0ZjQzM3eVFvVk5QY0NZT0g1VSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjM0OiJodHRwOi8vemV3LnRlc3QvdmVuZG9yL3Byb2R1Y3RzLzE5IjtzOjU6InJvdXRlIjtzOjIwOiJ2ZW5kb3IucHJvZHVjdHMuc2hvdyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjM7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9fQ==', 1778407564),
+('iWqtNYJMf6dKqnWGw4fyhm1EjmCd2dgHnJHHVLDZ', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoieHZZSHFJRFFWSG1MTGJiRUNSWDh5Njc0ckxxOXczWG1RZldoU0NiWCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozMDoiaHR0cDovL3pldy50ZXN0L3ZlbmRvci9yZXBvcnRzIjt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly96ZXcudGVzdC92ZW5kb3IvcmVwb3J0cyI7czo1OiJyb3V0ZSI7czoyMDoidmVuZG9yLnJlcG9ydHMuaW5kZXgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1778406437),
+('jd0bJpjuBNrh5JhXkCrqFrUnhzZCB45DFHtqNeKy', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiOVNZNnBEbklrbjdpM3VIY1NxQlZabE5UN3RsaVhhV2FhZU1qUDU5SiI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly96ZXcudGVzdC9sb2dpbiI7czo1OiJyb3V0ZSI7czo1OiJsb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1778406437),
+('jXI9RspsshCGonFqg7uB6FPZU8e7wUzvMTPEiB23', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiaW8xdmtqQ3VScHo2cnMxdnF6NFlTY09aVFF6Z1NHNUFEOXZKVVd5ZyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozNDoiaHR0cDovL3pldy50ZXN0L3ZlbmRvci93aXRoZHJhd2FscyI7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjM0OiJodHRwOi8vemV3LnRlc3QvdmVuZG9yL3dpdGhkcmF3YWxzIjtzOjU6InJvdXRlIjtzOjI0OiJ2ZW5kb3Iud2l0aGRyYXdhbHMuaW5kZXgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1778402438),
+('LzDjQciCdlHgiduQrlrc1qQ5Mq6pbaJQJbOnqj1D', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidHBhcVJaOHZFdzduUXFTN09FVFFDU1lWUW9kMVFGMWdTZzRsRDBDbSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly96ZXcudGVzdC9hZG1pbi9wcm9kdWN0cyI7czo1OiJyb3V0ZSI7czoyMDoiYWRtaW4ucHJvZHVjdHMuaW5kZXgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6MjI6IlBIUERFQlVHQkFSX1NUQUNLX0RBVEEiO2E6MDp7fX0=', 1778405597),
+('MVY1flDpDy6M5sR9YtWa2veom7YamuuJj8kjeief', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUmlIbGxUVEpQdXAwYWVnb3pqNEVQajZqUkNhSDdBZThNVE51UzVFbSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozMToiaHR0cDovL3pldy50ZXN0L3ZlbmRvci9zZXR0aW5ncyI7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjMxOiJodHRwOi8vemV3LnRlc3QvdmVuZG9yL3NldHRpbmdzIjtzOjU6InJvdXRlIjtzOjIxOiJ2ZW5kb3Iuc2V0dGluZ3MuaW5kZXgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1778402396),
+('rty8Io16ktXh5yD8zFgx0ss0f7pGoNMKojNHXobL', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTmlVY2V4VjVvdGY3T0I1MzByUTZmNllnMEhndHhTUVN5NVo1QXlQQSI7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly96ZXcudGVzdC9sb2dpbiI7czo1OiJyb3V0ZSI7czo1OiJsb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1778402439),
+('zeGXSTH4dDEsaSUrdEHEF6qRkm3RKoF8TDQTdaJB', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiYlFNRWdyb1E2enVrZ3RHa05yZzRsSGprRHdWUGVZa1d6N1BLTktLZCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozNDoiaHR0cDovL3pldy50ZXN0L3ZlbmRvci9wcm9kdWN0cy8xOSI7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjM0OiJodHRwOi8vemV3LnRlc3QvdmVuZG9yL3Byb2R1Y3RzLzE5IjtzOjU6InJvdXRlIjtzOjIwOiJ2ZW5kb3IucHJvZHVjdHMuc2hvdyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1778412133),
+('ZYF1J4jqZhs5wjSfXcJaD93fhP7hX8134PSwen2j', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiRnY1SDZqcFNsSkQ3S0E4TDNHSFl2aFA2dk1odVREQk1sMXVCWUNoWiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly96ZXcudGVzdC92ZW5kb3IvcHJvZHVjdHMiO3M6NToicm91dGUiO3M6MjE6InZlbmRvci5wcm9kdWN0cy5pbmRleCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjM7czo2OiJsb2NhbGUiO3M6MjoiZW4iO30=', 1778420427);
 
 -- --------------------------------------------------------
 
@@ -1502,10 +1686,10 @@ INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, 
 --
 
 CREATE TABLE `settings` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `value` text DEFAULT NULL,
-  `type` enum('string','number','boolean','image') NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci,
+  `type` enum('string','number','boolean','image') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1533,12 +1717,12 @@ INSERT INTO `settings` (`id`, `key`, `value`, `type`, `created_at`, `updated_at`
 --
 
 CREATE TABLE `shifts` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
   `date` date NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
-  `capacity` smallint(5) UNSIGNED NOT NULL COMMENT 'Max number of deliveries in this shift',
-  `name` varchar(255) DEFAULT NULL COMMENT 'e.g. Morning, Evening',
+  `capacity` smallint UNSIGNED NOT NULL COMMENT 'Max number of deliveries in this shift',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'e.g. Morning, Evening',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1559,8 +1743,8 @@ INSERT INTO `shifts` (`id`, `date`, `start_time`, `end_time`, `capacity`, `name`
 --
 
 CREATE TABLE `sliders` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `image` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1583,17 +1767,17 @@ INSERT INTO `sliders` (`id`, `image`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `tickets` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `subject` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `status` enum('pending','resolved','closed') NOT NULL DEFAULT 'pending',
-  `ticket_from` enum('user','vendor') NOT NULL DEFAULT 'user',
-  `attachments` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`attachments`)),
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED DEFAULT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('pending','resolved','closed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `ticket_from` enum('user','vendor') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
+  `attachments` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `tickets`
@@ -1613,15 +1797,15 @@ INSERT INTO `tickets` (`id`, `user_id`, `vendor_id`, `subject`, `description`, `
 --
 
 CREATE TABLE `ticket_messages` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `ticket_id` bigint(20) UNSIGNED NOT NULL,
-  `sender_type` enum('user','vendor','admin') NOT NULL DEFAULT 'user',
-  `sender_id` bigint(20) UNSIGNED NOT NULL,
-  `message` text NOT NULL,
-  `attachments` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`attachments`)),
+  `id` bigint UNSIGNED NOT NULL,
+  `ticket_id` bigint UNSIGNED NOT NULL,
+  `sender_type` enum('user','vendor','admin') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
+  `sender_id` bigint UNSIGNED NOT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attachments` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `ticket_messages`
@@ -1642,22 +1826,22 @@ INSERT INTO `ticket_messages` (`id`, `ticket_id`, `sender_type`, `sender_id`, `m
 --
 
 CREATE TABLE `users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `phone_verified_at` timestamp NULL DEFAULT NULL,
-  `role` enum('admin','vendor','user','delivery') NOT NULL DEFAULT 'user',
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `is_verified` tinyint(1) NOT NULL DEFAULT 0,
-  `password` varchar(255) NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `wallet` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `points` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `referral_code` varchar(255) DEFAULT NULL,
-  `referred_by_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
+  `role` enum('admin','vendor','user','delivery') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_verified` tinyint(1) NOT NULL DEFAULT '0',
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `wallet` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `points` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `referral_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `referred_by_id` bigint UNSIGNED DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -1668,19 +1852,22 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `phone`, `email_verified_at`, `phone_verified_at`, `role`, `is_active`, `is_verified`, `password`, `image`, `wallet`, `points`, `referral_code`, `referred_by_id`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Admin', 'admin@admin.com', '01234567890', NULL, NULL, 'admin', 1, 1, '$2y$12$d7i2L.FlERwj2OBj/S9O.eiuxMmBCe3q0rQ1MHaSD1gLhgbRqw1u.', NULL, 0.00, 0.00, NULL, NULL, 'OaQKQDqfslXs7k08lbh2uRsr2RLsGIHu5q9TSAiAhvfAQoS90zDO4CJvWAtA', '2026-01-11 10:45:25', '2026-01-11 10:45:25', NULL),
-(3, 'Test Vendor', 'test@vendor.com', '01233211230', NULL, NULL, 'vendor', 1, 0, '$2y$12$1BGvAlnxPs2yiEXtIZrWbuJyjI4y05UNHAqckOCzOgT4jb42gKD/y', NULL, 0.00, 0.00, NULL, NULL, NULL, '2026-01-12 15:10:07', '2026-01-12 15:10:07', NULL),
-(4, 'Test Vendor 2', 'test@vendor2.com', '01233211231', NULL, NULL, 'vendor', 1, 0, '$2y$12$Cn9yN8era2hZ1uC.8shbMepvmx2MRq0qScjtQRidXBwFIJPYHNahS', NULL, 0.00, 0.00, NULL, NULL, NULL, '2026-01-12 15:23:47', '2026-01-12 15:23:47', NULL),
-(15, 'khaled', 'khaled@vendor.com', '+20109988770', '2026-01-14 10:06:50', NULL, 'vendor', 1, 1, '$2y$12$1iqV2iaWG6FrfpN6tGoXLeTMf8uha9LwRLBcKH5xADu2ChZMx7fvS', 'users/eVdwuWMErtxikpWJNi3c2GzCz3uN3CpLOCijY0yK.png', 0.00, 0.00, NULL, NULL, NULL, '2026-01-14 10:06:38', '2026-01-14 14:58:44', NULL),
-(16, 'Islam', 'islam@vendor.com', '+20123032101', NULL, NULL, 'vendor', 1, 1, '$2y$12$3RHRfXqnCxm6zNpvRG66m.db/fFT0cXqYBQdBOGr.AB6kmJRWfd/y', NULL, 0.00, 0.00, NULL, NULL, NULL, '2026-01-15 08:07:55', '2026-02-26 03:10:48', NULL),
-(17, 'islam 2', 'islam2@vendor.com', '+201023230231', NULL, NULL, 'vendor', 1, 0, '$2y$12$OFi68bFc/VuOeEoCNV0X4us2yvOPzKDoTxF5v2Gen38G6UjI2KfFW', NULL, 0.00, 0.00, NULL, NULL, NULL, '2026-01-15 10:40:43', '2026-01-15 10:40:43', NULL),
-(18, 'Test User', 'test@user.com', '+201234567890', NULL, NULL, 'user', 1, 1, '$2y$12$ULTfZljbkO/B4cAQAlva9OOrNabUH6q8a4fAqwkWE7r9OmCxEhPv2', 'users/OofEca30obQjClbwg88umNT7bLBl6H1qDJ2sR6Z3.png', 779.25, 209.00, 'AHMED123', NULL, NULL, '2026-01-15 12:33:55', '2026-02-22 10:42:39', NULL),
-(19, 'Islam Branch', 'islam@branch.com', '+201109002010', NULL, NULL, 'vendor', 1, 0, '$2y$12$ylGfk4Rsi43m6ctSqkgwLuObmoO1W.w1eBtcAnU2yS0h/G9dpxXyq', NULL, 0.00, 0.00, NULL, NULL, NULL, '2026-01-18 09:43:34', '2026-02-26 03:11:14', NULL),
-(20, 'Delivery Man 1', 'delivery1@zew.com', '+201551001120', '2026-02-22 12:31:07', NULL, 'delivery', 1, 1, '$2y$12$BMS5Nco4t8pybRrTS4Me5.zqZoyOR/50XM14QAYNnPZGl5.E5foti', NULL, 0.00, 0.00, '7N4xFyoh', NULL, NULL, '2026-02-22 09:25:51', '2026-02-22 12:31:07', NULL),
-(21, 'Test Delivery 2', 'testdel@zew.com', '+2012255510', NULL, NULL, 'delivery', 1, 0, '$2y$12$jw9yW.V.5kUz.SRsfamKK.q47DqSNrkPnYLPOMEAKkr9tErXWb./G', NULL, 0.00, 0.00, 'Oz5VZbT9', NULL, NULL, '2026-02-22 10:16:32', '2026-02-22 10:16:32', NULL),
-(22, 'branch user', 'khaled@branch.com', '+201088112121', NULL, NULL, 'vendor', 1, 0, '$2y$12$HjwKZoTabBcZBACtks8d5ev.CB6cnsZK82wEdjamlNi1grSHHox2K', NULL, 0.00, 0.00, '8wVChHok', NULL, NULL, '2026-02-26 02:40:51', '2026-02-26 02:40:51', NULL),
-(23, 'tt', 't@t.t', '012345678952', NULL, NULL, 'vendor', 1, 0, '$2y$12$LMyMl5s/I.uo6A9TwqZRueRFp/l8.h5lbGbqWO2ALJ40WuFFNUedy', NULL, 0.00, 0.00, 'oAATUcTe', NULL, NULL, '2026-02-26 03:08:00', '2026-02-26 03:08:00', NULL),
-(24, 'Test User 2', 'test@user2.com', '+201234567810', '2026-03-23 10:19:54', NULL, 'user', 1, 1, '$2y$12$HWZwsWVQoRCxWs6OCFlF9O1bljWwYTQFoOafPFO5DWbXN/kUs65C2', NULL, 2118.00, 441.00, 'UCBQgbXY', NULL, NULL, '2026-03-23 10:18:46', '2026-03-23 13:37:16', NULL);
+(1, 'Admin', 'admin@admin.com', '01234567890', NULL, NULL, 'admin', 1, 1, '$2y$12$d7i2L.FlERwj2OBj/S9O.eiuxMmBCe3q0rQ1MHaSD1gLhgbRqw1u.', NULL, '0.00', '0.00', NULL, NULL, 'F29cRKZ1vNWcdq3WiCd5bJQfEj9ynIYDHv5q3SEWnpo1rgOEQUVCCnruIma4', '2026-01-11 10:45:25', '2026-01-11 10:45:25', NULL),
+(3, 'Test Vendor', 'test@vendor.com', '01233211230', NULL, NULL, 'vendor', 1, 1, '$2y$12$1BGvAlnxPs2yiEXtIZrWbuJyjI4y05UNHAqckOCzOgT4jb42gKD/y', NULL, '0.00', '0.00', NULL, NULL, NULL, '2026-01-12 15:10:07', '2026-01-12 15:10:07', NULL),
+(4, 'Test Vendor 2', 'test@vendor2.com', '01233211231', NULL, NULL, 'vendor', 1, 0, '$2y$12$Cn9yN8era2hZ1uC.8shbMepvmx2MRq0qScjtQRidXBwFIJPYHNahS', NULL, '0.00', '0.00', NULL, NULL, NULL, '2026-01-12 15:23:47', '2026-01-12 15:23:47', NULL),
+(15, 'khaled', 'khaled@vendor.com', '+20109988770', '2026-01-14 10:06:50', NULL, 'vendor', 1, 1, '$2y$12$1iqV2iaWG6FrfpN6tGoXLeTMf8uha9LwRLBcKH5xADu2ChZMx7fvS', 'users/eVdwuWMErtxikpWJNi3c2GzCz3uN3CpLOCijY0yK.png', '0.00', '0.00', NULL, NULL, NULL, '2026-01-14 10:06:38', '2026-01-14 14:58:44', NULL),
+(16, 'Islam', 'islam@vendor.com', '+20123032101', NULL, NULL, 'vendor', 1, 1, '$2y$12$3RHRfXqnCxm6zNpvRG66m.db/fFT0cXqYBQdBOGr.AB6kmJRWfd/y', NULL, '0.00', '0.00', NULL, NULL, NULL, '2026-01-15 08:07:55', '2026-02-26 03:10:48', NULL),
+(17, 'islam 2', 'islam2@vendor.com', '+201023230231', NULL, NULL, 'vendor', 1, 0, '$2y$12$OFi68bFc/VuOeEoCNV0X4us2yvOPzKDoTxF5v2Gen38G6UjI2KfFW', NULL, '0.00', '0.00', NULL, NULL, NULL, '2026-01-15 10:40:43', '2026-01-15 10:40:43', NULL),
+(18, 'Test User', 'test@user.com', '+201234567890', NULL, NULL, 'user', 1, 1, '$2y$12$ULTfZljbkO/B4cAQAlva9OOrNabUH6q8a4fAqwkWE7r9OmCxEhPv2', 'users/OofEca30obQjClbwg88umNT7bLBl6H1qDJ2sR6Z3.png', '779.25', '209.00', 'AHMED123', NULL, NULL, '2026-01-15 12:33:55', '2026-02-22 10:42:39', NULL),
+(19, 'Islam Branch', 'islam@branch.com', '+201109002010', NULL, NULL, 'vendor', 1, 0, '$2y$12$ylGfk4Rsi43m6ctSqkgwLuObmoO1W.w1eBtcAnU2yS0h/G9dpxXyq', NULL, '0.00', '0.00', NULL, NULL, NULL, '2026-01-18 09:43:34', '2026-02-26 03:11:14', NULL),
+(20, 'Delivery Man 1', 'delivery1@zew.com', '+201551001120', '2026-02-22 12:31:07', NULL, 'delivery', 1, 1, '$2y$12$BMS5Nco4t8pybRrTS4Me5.zqZoyOR/50XM14QAYNnPZGl5.E5foti', NULL, '0.00', '0.00', '7N4xFyoh', NULL, NULL, '2026-02-22 09:25:51', '2026-02-22 12:31:07', NULL),
+(21, 'Test Delivery 2', 'testdel@zew.com', '+2012255510', NULL, NULL, 'delivery', 1, 0, '$2y$12$jw9yW.V.5kUz.SRsfamKK.q47DqSNrkPnYLPOMEAKkr9tErXWb./G', NULL, '0.00', '0.00', 'Oz5VZbT9', NULL, NULL, '2026-02-22 10:16:32', '2026-02-22 10:16:32', NULL),
+(22, 'branch user', 'khaled@branch.com', '+201088112121', NULL, NULL, 'vendor', 1, 0, '$2y$12$HjwKZoTabBcZBACtks8d5ev.CB6cnsZK82wEdjamlNi1grSHHox2K', NULL, '0.00', '0.00', '8wVChHok', NULL, NULL, '2026-02-26 02:40:51', '2026-02-26 02:40:51', NULL),
+(23, 'tt', 't@t.t', '012345678952', NULL, NULL, 'vendor', 1, 0, '$2y$12$LMyMl5s/I.uo6A9TwqZRueRFp/l8.h5lbGbqWO2ALJ40WuFFNUedy', NULL, '0.00', '0.00', 'oAATUcTe', NULL, NULL, '2026-02-26 03:08:00', '2026-02-26 03:08:00', NULL),
+(24, 'Test User 2', 'test@user2.com', '+201234567810', '2026-03-23 10:19:54', NULL, 'user', 1, 1, '$2y$12$HWZwsWVQoRCxWs6OCFlF9O1bljWwYTQFoOafPFO5DWbXN/kUs65C2', NULL, '2118.00', '441.00', 'UCBQgbXY', NULL, NULL, '2026-03-23 10:18:46', '2026-03-23 13:37:16', NULL),
+(25, 'salem', 'el3amed222@gmail.com', NULL, '2026-04-23 13:07:35', '2026-04-23 13:08:44', 'user', 1, 1, '$2y$12$ahOGbW0Co/7/FQb5465XE.6VbO7AHsNwRaIxLeA5DZm5pbDZq8bLm', NULL, '0.00', '0.00', 'eAGg3hfb', NULL, NULL, '2026-04-23 11:07:06', '2026-04-23 11:07:06', NULL),
+(26, 'Salem delivery', 'salem@delivery.com', '01159537854', NULL, NULL, 'delivery', 1, 1, '$2y$12$pJ4SFnslz8nO.A73UroD.e1FSRvQMS.zBKL7nF/Nb2JVwRNF3wzS2', NULL, '0.00', '0.00', 'JOVSERWs', NULL, NULL, '2026-04-23 11:39:02', '2026-04-23 11:39:02', NULL),
+(31, 'Ahmed Salem', 'el3amed22@gmail.com', '01006573885', '2026-05-09 09:44:38', NULL, 'vendor', 1, 1, '$2y$12$Ol4EyNBKN51VeZNyctTGguO1PCgDJnErVNKcalXw4bu1oEkvbDFy2', NULL, '0.00', '0.00', 'Cb7ceghL', NULL, NULL, '2026-05-09 09:43:19', '2026-05-09 09:44:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -1689,14 +1876,14 @@ INSERT INTO `users` (`id`, `name`, `email`, `phone`, `email_verified_at`, `phone
 --
 
 CREATE TABLE `variants` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `is_required` tinyint(1) NOT NULL DEFAULT 0,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `is_required` tinyint(1) NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `variants`
@@ -1716,14 +1903,14 @@ INSERT INTO `variants` (`id`, `name`, `is_required`, `is_active`, `created_at`, 
 --
 
 CREATE TABLE `variant_options` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `variant_id` bigint(20) UNSIGNED NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `code` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `variant_id` bigint UNSIGNED NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `variant_options`
@@ -1753,19 +1940,19 @@ INSERT INTO `variant_options` (`id`, `variant_id`, `name`, `code`, `created_at`,
 --
 
 CREATE TABLE `variant_requests` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`options`)),
-  `description` text DEFAULT NULL,
-  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
-  `admin_notes` text DEFAULT NULL,
-  `reviewed_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('pending','approved','rejected') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `admin_notes` text COLLATE utf8mb4_unicode_ci,
+  `reviewed_by` bigint UNSIGNED DEFAULT NULL,
   `reviewed_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `variant_requests`
@@ -1783,24 +1970,24 @@ INSERT INTO `variant_requests` (`id`, `vendor_id`, `name`, `options`, `descripti
 --
 
 CREATE TABLE `vendors` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`name`)),
-  `owner_id` bigint(20) UNSIGNED NOT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `is_featured` tinyint(1) NOT NULL DEFAULT 0,
-  `balance` double NOT NULL DEFAULT 0,
-  `commission_rate` double NOT NULL DEFAULT 0,
-  `plan_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `owner_id` bigint UNSIGNED NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_featured` tinyint(1) NOT NULL DEFAULT '0',
+  `balance` double NOT NULL DEFAULT '0',
+  `commission_rate` double NOT NULL DEFAULT '0',
+  `plan_id` bigint UNSIGNED DEFAULT NULL,
   `subscription_start` date DEFAULT NULL,
   `subscription_end` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `vendors`
@@ -1810,7 +1997,8 @@ INSERT INTO `vendors` (`id`, `slug`, `name`, `owner_id`, `phone`, `address`, `im
 (2, 'banda-vendor', '{\"ar\": \"ماركت باندا\", \"en\": \"Banda Vendor\"}', 3, '01233211230', '3 wzf st Cairo. Egypt', 'vendors/27RqJdLmLF1nHArn6d7PxMeOrvOVs2A5a2qgWWaM.png', 1, 0, 111, 0, 1, '2026-01-12', '2026-02-11', '2026-01-12 15:10:07', '2026-03-23 13:24:15', NULL),
 (3, 'hayper-vendor', '{\"ar\": \"ماركت هايبر\", \"en\": \"Hayper Vendor\"}', 4, '01233211231', '3 wzf st Cairo. Egypt', 'vendors/f11PzLAar52uyvJfQQkRfubvgHmNFTp0GcogVcmc.png', 1, 0, 0, 0, 1, '2026-01-12', '2026-02-11', '2026-01-12 15:23:47', '2026-01-14 07:55:18', NULL),
 (12, 'fathalla-market', '{\"ar\": \"فتح الله ماركت\", \"en\": \"Fathalla Market\"}', 15, '+20109988770', '3 abbas st. nasr city, Cairo, Egypt', 'vendors/ox7x0kfsews9fSuoRvvRfSqvb1vJBSCjp0VrHsu2.jpg', 1, 0, 0, 0, 1, '2026-01-14', '2026-02-13', '2026-01-14 10:06:38', '2026-01-14 14:29:42', NULL),
-(13, 'saudi-market', '{\"ar\": \"سعودي ماركت\", \"en\": \"Saudi Market\"}', 16, '+20123032101', '3 Makram St. Cairo Egypt', 'vendors/ln8IAKuQUZmw8Xx2VPhYgiMDievBF3kCxYzAbiLN.webp', 1, 0, 3063, 10, 2, '2026-01-15', '2026-02-14', '2026-01-15 08:07:55', '2026-03-23 13:24:15', NULL);
+(13, 'saudi-market', '{\"ar\": \"سعودي ماركت\", \"en\": \"Saudi Market\"}', 16, '+20123032101', '3 Makram St. Cairo Egypt', 'vendors/ln8IAKuQUZmw8Xx2VPhYgiMDievBF3kCxYzAbiLN.webp', 1, 0, 3063, 10, 2, '2026-01-15', '2026-02-14', '2026-01-15 08:07:55', '2026-03-23 13:24:15', NULL),
+(15, 'al-salem', '{\"en\":\"Al-Salem\",\"ar\":\"السالم\"}', 31, '01006573885', '3 makram', 'C:\\laragon\\tmp\\php1034.tmp', 1, 0, 0, 0, NULL, NULL, NULL, '2026-05-09 09:43:19', '2026-05-09 09:43:19', NULL);
 
 -- --------------------------------------------------------
 
@@ -1819,30 +2007,30 @@ INSERT INTO `vendors` (`id`, `slug`, `name`, `owner_id`, `phone`, `address`, `im
 --
 
 CREATE TABLE `vendor_balance_transactions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `vendor_order_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `type` enum('addition','subtraction') NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED DEFAULT NULL,
+  `vendor_order_id` bigint UNSIGNED DEFAULT NULL,
+  `type` enum('addition','subtraction') COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `balance_after` decimal(10,2) NOT NULL,
-  `notes` varchar(255) DEFAULT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`payload`)),
+  `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `vendor_balance_transactions`
 --
 
 INSERT INTO `vendor_balance_transactions` (`id`, `vendor_id`, `order_id`, `vendor_order_id`, `type`, `amount`, `balance_after`, `notes`, `payload`, `created_at`, `updated_at`) VALUES
-(1, 13, 3, 5, 'addition', 946.00, 946.00, 'Order #3 (Vendor Order #5)', '{\"gross\": 946, \"commission\": 0, \"profit_type\": \"subscription\", \"payment_method\": \"COD\"}', '2026-01-21 10:35:47', '2026-01-21 10:35:47'),
-(2, 2, 3, 6, 'addition', 50.00, 50.00, 'Order #3 (Vendor Order #6)', '{\"gross\": 50, \"commission\": 0, \"profit_type\": \"subscription\", \"payment_method\": \"COD\"}', '2026-01-21 10:35:47', '2026-01-21 10:35:47'),
-(3, 13, NULL, NULL, 'subtraction', 6.00, 940.00, 'Withdrawal #1', '{\"method\": \"InstaPay\", \"processed_by\": 1}', '2026-01-21 10:49:24', '2026-01-21 10:49:24'),
-(4, 13, NULL, NULL, 'subtraction', 40.00, 900.00, 'Withdrawal #3', '{\"method\": \"Instapay\", \"processed_by\": 1}', '2026-01-25 13:15:38', '2026-01-25 13:15:38'),
-(5, 2, 10, 19, 'addition', 61.00, 111.00, 'Order #10 (Vendor Order #19)', '{\"profit_type\":\"commission\",\"gross\":61,\"commission\":0,\"payment_method\":\"COD\"}', '2026-03-23 13:24:15', '2026-03-23 13:24:15'),
-(6, 13, 10, 20, 'addition', 2163.00, 3063.00, 'Order #10 (Vendor Order #20)', '{\"profit_type\":\"commission\",\"gross\":2163,\"commission\":0,\"payment_method\":\"COD\"}', '2026-03-23 13:24:15', '2026-03-23 13:24:15');
+(1, 13, 3, 5, 'addition', '946.00', '946.00', 'Order #3 (Vendor Order #5)', '{\"gross\": 946, \"commission\": 0, \"profit_type\": \"subscription\", \"payment_method\": \"COD\"}', '2026-01-21 10:35:47', '2026-01-21 10:35:47'),
+(2, 2, 3, 6, 'addition', '50.00', '50.00', 'Order #3 (Vendor Order #6)', '{\"gross\": 50, \"commission\": 0, \"profit_type\": \"subscription\", \"payment_method\": \"COD\"}', '2026-01-21 10:35:47', '2026-01-21 10:35:47'),
+(3, 13, NULL, NULL, 'subtraction', '6.00', '940.00', 'Withdrawal #1', '{\"method\": \"InstaPay\", \"processed_by\": 1}', '2026-01-21 10:49:24', '2026-01-21 10:49:24'),
+(4, 13, NULL, NULL, 'subtraction', '40.00', '900.00', 'Withdrawal #3', '{\"method\": \"Instapay\", \"processed_by\": 1}', '2026-01-25 13:15:38', '2026-01-25 13:15:38'),
+(5, 2, 10, 19, 'addition', '61.00', '111.00', 'Order #10 (Vendor Order #19)', '{\"profit_type\":\"commission\",\"gross\":61,\"commission\":0,\"payment_method\":\"COD\"}', '2026-03-23 13:24:15', '2026-03-23 13:24:15'),
+(6, 13, 10, 20, 'addition', '2163.00', '3063.00', 'Order #10 (Vendor Order #20)', '{\"profit_type\":\"commission\",\"gross\":2163,\"commission\":0,\"payment_method\":\"COD\"}', '2026-03-23 13:24:15', '2026-03-23 13:24:15');
 
 -- --------------------------------------------------------
 
@@ -1851,17 +2039,17 @@ INSERT INTO `vendor_balance_transactions` (`id`, `vendor_id`, `order_id`, `vendo
 --
 
 CREATE TABLE `vendor_orders` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `branch_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `branch_id` bigint UNSIGNED DEFAULT NULL,
   `sub_total` decimal(10,2) NOT NULL,
-  `discount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `shipping_cost` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `discount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `shipping_cost` decimal(10,2) NOT NULL DEFAULT '0.00',
   `total` decimal(10,2) NOT NULL,
-  `status` enum('pending','processing','ready_for_pickup','shipped','delivered','cancelled','refunded') DEFAULT 'pending',
-  `notes` text DEFAULT NULL,
-  `commission` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `status` enum('pending','processing','ready_for_pickup','shipped','delivered','cancelled','refunded') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `commission` decimal(10,2) NOT NULL DEFAULT '0.00',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -1872,26 +2060,26 @@ CREATE TABLE `vendor_orders` (
 --
 
 INSERT INTO `vendor_orders` (`id`, `order_id`, `vendor_id`, `branch_id`, `sub_total`, `discount`, `shipping_cost`, `total`, `status`, `notes`, `commission`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 13, 5, 45.00, 0.00, 0.00, 70.00, 'pending', NULL, 0.00, '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
-(2, 1, 2, 3, 10.00, 0.00, 0.00, 10.00, 'pending', NULL, 0.00, '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
-(3, 2, 2, 3, 30.00, 0.00, 0.00, 30.00, 'cancelled', NULL, 0.00, '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
-(4, 2, 13, 5, 930.00, 0.00, 25.00, 955.00, 'cancelled', NULL, 0.00, '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
-(5, 3, 13, 5, 921.00, 0.00, 25.00, 946.00, 'shipped', NULL, 0.00, '2026-01-19 13:08:22', '2026-01-25 13:14:35', NULL),
-(6, 3, 2, 3, 50.00, 0.00, 0.00, 50.00, 'pending', NULL, 0.00, '2026-01-19 13:08:22', '2026-01-19 13:08:22', NULL),
-(7, 4, 13, 5, 921.00, 0.00, 25.00, 946.00, 'processing', NULL, 0.00, '2026-01-19 13:16:43', '2026-01-20 07:42:11', NULL),
-(8, 4, 2, 3, 50.00, 0.00, 0.00, 50.00, 'pending', NULL, 0.00, '2026-01-19 13:16:43', '2026-01-19 13:16:43', NULL),
-(9, 5, 2, 3, 50.00, 0.00, 0.00, 50.00, 'pending', NULL, 0.00, '2026-01-19 13:50:08', '2026-01-19 13:50:08', NULL),
-(10, 6, 13, 6, 921.00, 0.00, 100.00, 1021.00, 'delivered', NULL, 0.00, '2026-01-19 14:54:26', '2026-01-21 11:04:54', NULL),
-(11, 6, 2, 3, 50.00, 0.00, 0.00, 50.00, 'delivered', NULL, 0.00, '2026-01-19 14:54:26', '2026-01-21 11:03:18', NULL),
-(12, 7, 13, 6, 921.00, 230.25, 100.00, 790.75, 'refunded', NULL, 0.00, '2026-01-19 14:57:29', '2026-01-20 09:23:29', NULL),
-(13, 7, 2, 3, 50.00, 12.50, 0.00, 37.50, 'refunded', NULL, 0.00, '2026-01-19 14:57:29', '2026-01-20 09:24:32', NULL),
-(14, 8, 3, 1, 10.00, 0.00, 0.00, 10.00, 'ready_for_pickup', NULL, 0.00, '2026-02-22 10:42:39', '2026-02-22 11:46:58', NULL),
-(15, 8, 12, 4, 297.50, 0.00, 0.00, 297.50, 'ready_for_pickup', NULL, 0.00, '2026-02-22 10:42:39', '2026-02-22 11:46:23', NULL),
-(16, 8, 13, 5, 13.50, 0.00, 0.00, 13.50, 'ready_for_pickup', NULL, 0.00, '2026-02-22 10:42:39', '2026-02-22 10:56:35', NULL),
-(17, 9, 2, 3, 10.00, 0.00, 97.00, 107.00, 'ready_for_pickup', NULL, 0.00, '2026-03-23 11:11:55', '2026-03-23 11:38:47', NULL),
-(18, 9, 13, 6, 2154.00, 0.00, 138.00, 2292.00, 'ready_for_pickup', NULL, 0.00, '2026-03-23 11:11:55', '2026-03-23 11:39:35', NULL),
-(19, 10, 2, 3, 10.00, 0.00, 51.00, 61.00, 'cancelled', NULL, 0.00, '2026-03-23 11:14:31', '2026-03-23 13:16:26', NULL),
-(20, 10, 13, 5, 2154.00, 0.00, 9.00, 2163.00, 'cancelled', NULL, 0.00, '2026-03-23 11:14:31', '2026-03-23 13:16:26', NULL);
+(1, 1, 13, 5, '45.00', '0.00', '0.00', '70.00', 'pending', NULL, '0.00', '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
+(2, 1, 2, 3, '10.00', '0.00', '0.00', '10.00', 'pending', NULL, '0.00', '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
+(3, 2, 2, 3, '30.00', '0.00', '0.00', '30.00', 'cancelled', NULL, '0.00', '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
+(4, 2, 13, 5, '930.00', '0.00', '25.00', '955.00', 'cancelled', NULL, '0.00', '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
+(5, 3, 13, 5, '921.00', '0.00', '25.00', '946.00', 'shipped', NULL, '0.00', '2026-01-19 13:08:22', '2026-01-25 13:14:35', NULL),
+(6, 3, 2, 3, '50.00', '0.00', '0.00', '50.00', 'pending', NULL, '0.00', '2026-01-19 13:08:22', '2026-01-19 13:08:22', NULL),
+(7, 4, 13, 5, '921.00', '0.00', '25.00', '946.00', 'processing', NULL, '0.00', '2026-01-19 13:16:43', '2026-01-20 07:42:11', NULL),
+(8, 4, 2, 3, '50.00', '0.00', '0.00', '50.00', 'pending', NULL, '0.00', '2026-01-19 13:16:43', '2026-01-19 13:16:43', NULL),
+(9, 5, 2, 3, '50.00', '0.00', '0.00', '50.00', 'pending', NULL, '0.00', '2026-01-19 13:50:08', '2026-01-19 13:50:08', NULL),
+(10, 6, 13, 6, '921.00', '0.00', '100.00', '1021.00', 'delivered', NULL, '0.00', '2026-01-19 14:54:26', '2026-01-21 11:04:54', NULL),
+(11, 6, 2, 3, '50.00', '0.00', '0.00', '50.00', 'delivered', NULL, '0.00', '2026-01-19 14:54:26', '2026-01-21 11:03:18', NULL),
+(12, 7, 13, 6, '921.00', '230.25', '100.00', '790.75', 'refunded', NULL, '0.00', '2026-01-19 14:57:29', '2026-01-20 09:23:29', NULL),
+(13, 7, 2, 3, '50.00', '12.50', '0.00', '37.50', 'refunded', NULL, '0.00', '2026-01-19 14:57:29', '2026-01-20 09:24:32', NULL),
+(14, 8, 3, 1, '10.00', '0.00', '0.00', '10.00', 'ready_for_pickup', NULL, '0.00', '2026-02-22 10:42:39', '2026-02-22 11:46:58', NULL),
+(15, 8, 12, 4, '297.50', '0.00', '0.00', '297.50', 'ready_for_pickup', NULL, '0.00', '2026-02-22 10:42:39', '2026-02-22 11:46:23', NULL),
+(16, 8, 13, 5, '13.50', '0.00', '0.00', '13.50', 'ready_for_pickup', NULL, '0.00', '2026-02-22 10:42:39', '2026-02-22 10:56:35', NULL),
+(17, 9, 2, 3, '10.00', '0.00', '97.00', '107.00', 'ready_for_pickup', NULL, '0.00', '2026-03-23 11:11:55', '2026-03-23 11:38:47', NULL),
+(18, 9, 13, 6, '2154.00', '0.00', '138.00', '2292.00', 'ready_for_pickup', NULL, '0.00', '2026-03-23 11:11:55', '2026-03-23 11:39:35', NULL),
+(19, 10, 2, 3, '10.00', '0.00', '51.00', '61.00', 'cancelled', NULL, '0.00', '2026-03-23 11:14:31', '2026-03-23 13:16:26', NULL),
+(20, 10, 13, 5, '2154.00', '0.00', '9.00', '2163.00', 'cancelled', NULL, '0.00', '2026-03-23 11:14:31', '2026-03-23 13:16:26', NULL);
 
 -- --------------------------------------------------------
 
@@ -1900,14 +2088,14 @@ INSERT INTO `vendor_orders` (`id`, `order_id`, `vendor_id`, `branch_id`, `sub_to
 --
 
 CREATE TABLE `vendor_order_items` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_order_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `variant_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_order_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `variant_id` bigint UNSIGNED DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 1,
+  `quantity` int NOT NULL DEFAULT '1',
   `total` decimal(10,2) NOT NULL,
-  `notes` text DEFAULT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -1918,35 +2106,35 @@ CREATE TABLE `vendor_order_items` (
 --
 
 INSERT INTO `vendor_order_items` (`id`, `vendor_order_id`, `product_id`, `variant_id`, `price`, `quantity`, `total`, `notes`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 11, 12, 45.00, 1, 45.00, NULL, '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
-(2, 2, 1, NULL, 10.00, 1, 10.00, NULL, '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
-(3, 3, 1, NULL, 10.00, 3, 30.00, NULL, '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
-(4, 4, 11, 12, 45.00, 2, 90.00, NULL, '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
-(5, 4, 10, NULL, 420.00, 2, 840.00, NULL, '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
-(6, 5, 10, NULL, 420.00, 2, 840.00, NULL, '2026-01-19 13:08:22', '2026-01-19 13:08:22', NULL),
-(7, 5, 11, 12, 40.50, 2, 81.00, NULL, '2026-01-19 13:08:22', '2026-01-19 13:08:22', NULL),
-(8, 6, 1, NULL, 10.00, 5, 50.00, NULL, '2026-01-19 13:08:22', '2026-01-19 13:08:22', NULL),
-(9, 7, 10, NULL, 420.00, 2, 840.00, NULL, '2026-01-19 13:16:43', '2026-01-19 13:16:43', NULL),
-(10, 7, 11, 12, 40.50, 2, 81.00, NULL, '2026-01-19 13:16:43', '2026-01-19 13:16:43', NULL),
-(11, 8, 1, NULL, 10.00, 5, 50.00, NULL, '2026-01-19 13:16:43', '2026-01-19 13:16:43', NULL),
-(12, 9, 1, NULL, 10.00, 5, 50.00, NULL, '2026-01-19 13:50:08', '2026-01-19 13:50:08', NULL),
-(13, 10, 10, NULL, 420.00, 2, 840.00, NULL, '2026-01-19 14:54:26', '2026-01-19 14:54:26', NULL),
-(14, 10, 11, 12, 40.50, 2, 81.00, NULL, '2026-01-19 14:54:26', '2026-01-19 14:54:26', NULL),
-(15, 11, 1, NULL, 10.00, 5, 50.00, NULL, '2026-01-19 14:54:26', '2026-01-19 14:54:26', NULL),
-(16, 12, 10, NULL, 420.00, 2, 840.00, NULL, '2026-01-19 14:57:29', '2026-01-19 14:57:29', NULL),
-(17, 12, 11, 12, 40.50, 2, 81.00, NULL, '2026-01-19 14:57:29', '2026-01-19 14:57:29', NULL),
-(18, 13, 1, NULL, 10.00, 5, 50.00, NULL, '2026-01-19 14:57:29', '2026-01-19 14:57:29', NULL),
-(19, 14, 7, 8, 10.00, 1, 10.00, NULL, '2026-02-22 10:42:39', '2026-02-22 10:42:39', NULL),
-(20, 15, 8, NULL, 297.50, 1, 297.50, NULL, '2026-02-22 10:42:39', '2026-02-22 10:42:39', NULL),
-(21, 16, 15, 28, 13.50, 1, 13.50, NULL, '2026-02-22 10:42:39', '2026-02-22 10:42:39', NULL),
-(22, 17, 1, NULL, 10.00, 1, 10.00, NULL, '2026-03-23 11:11:55', '2026-03-23 11:11:55', NULL),
-(23, 18, 10, NULL, 420.00, 5, 2100.00, NULL, '2026-03-23 11:11:55', '2026-03-23 11:11:55', NULL),
-(24, 18, 11, 12, 40.50, 1, 40.50, NULL, '2026-03-23 11:11:55', '2026-03-23 11:11:55', NULL),
-(25, 18, 15, 28, 13.50, 1, 13.50, NULL, '2026-03-23 11:11:55', '2026-03-23 11:11:55', NULL),
-(26, 19, 1, NULL, 10.00, 1, 10.00, NULL, '2026-03-23 11:14:31', '2026-03-23 11:14:31', NULL),
-(27, 20, 10, NULL, 420.00, 5, 2100.00, NULL, '2026-03-23 11:14:31', '2026-03-23 11:14:31', NULL),
-(28, 20, 11, 12, 40.50, 1, 40.50, NULL, '2026-03-23 11:14:31', '2026-03-23 11:14:31', NULL),
-(29, 20, 15, 28, 13.50, 1, 13.50, NULL, '2026-03-23 11:14:31', '2026-03-23 11:14:31', NULL);
+(1, 1, 11, 12, '45.00', 1, '45.00', NULL, '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
+(2, 2, 1, NULL, '10.00', 1, '10.00', NULL, '2026-01-19 11:57:37', '2026-01-19 11:57:37', NULL),
+(3, 3, 1, NULL, '10.00', 3, '30.00', NULL, '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
+(4, 4, 11, 12, '45.00', 2, '90.00', NULL, '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
+(5, 4, 10, NULL, '420.00', 2, '840.00', NULL, '2026-01-19 12:52:44', '2026-01-19 12:52:44', NULL),
+(6, 5, 10, NULL, '420.00', 2, '840.00', NULL, '2026-01-19 13:08:22', '2026-01-19 13:08:22', NULL),
+(7, 5, 11, 12, '40.50', 2, '81.00', NULL, '2026-01-19 13:08:22', '2026-01-19 13:08:22', NULL),
+(8, 6, 1, NULL, '10.00', 5, '50.00', NULL, '2026-01-19 13:08:22', '2026-01-19 13:08:22', NULL),
+(9, 7, 10, NULL, '420.00', 2, '840.00', NULL, '2026-01-19 13:16:43', '2026-01-19 13:16:43', NULL),
+(10, 7, 11, 12, '40.50', 2, '81.00', NULL, '2026-01-19 13:16:43', '2026-01-19 13:16:43', NULL),
+(11, 8, 1, NULL, '10.00', 5, '50.00', NULL, '2026-01-19 13:16:43', '2026-01-19 13:16:43', NULL),
+(12, 9, 1, NULL, '10.00', 5, '50.00', NULL, '2026-01-19 13:50:08', '2026-01-19 13:50:08', NULL),
+(13, 10, 10, NULL, '420.00', 2, '840.00', NULL, '2026-01-19 14:54:26', '2026-01-19 14:54:26', NULL),
+(14, 10, 11, 12, '40.50', 2, '81.00', NULL, '2026-01-19 14:54:26', '2026-01-19 14:54:26', NULL),
+(15, 11, 1, NULL, '10.00', 5, '50.00', NULL, '2026-01-19 14:54:26', '2026-01-19 14:54:26', NULL),
+(16, 12, 10, NULL, '420.00', 2, '840.00', NULL, '2026-01-19 14:57:29', '2026-01-19 14:57:29', NULL),
+(17, 12, 11, 12, '40.50', 2, '81.00', NULL, '2026-01-19 14:57:29', '2026-01-19 14:57:29', NULL),
+(18, 13, 1, NULL, '10.00', 5, '50.00', NULL, '2026-01-19 14:57:29', '2026-01-19 14:57:29', NULL),
+(19, 14, 7, 8, '10.00', 1, '10.00', NULL, '2026-02-22 10:42:39', '2026-02-22 10:42:39', NULL),
+(20, 15, 8, NULL, '297.50', 1, '297.50', NULL, '2026-02-22 10:42:39', '2026-02-22 10:42:39', NULL),
+(21, 16, 15, 28, '13.50', 1, '13.50', NULL, '2026-02-22 10:42:39', '2026-02-22 10:42:39', NULL),
+(22, 17, 1, NULL, '10.00', 1, '10.00', NULL, '2026-03-23 11:11:55', '2026-03-23 11:11:55', NULL),
+(23, 18, 10, NULL, '420.00', 5, '2100.00', NULL, '2026-03-23 11:11:55', '2026-03-23 11:11:55', NULL),
+(24, 18, 11, 12, '40.50', 1, '40.50', NULL, '2026-03-23 11:11:55', '2026-03-23 11:11:55', NULL),
+(25, 18, 15, 28, '13.50', 1, '13.50', NULL, '2026-03-23 11:11:55', '2026-03-23 11:11:55', NULL),
+(26, 19, 1, NULL, '10.00', 1, '10.00', NULL, '2026-03-23 11:14:31', '2026-03-23 11:14:31', NULL),
+(27, 20, 10, NULL, '420.00', 5, '2100.00', NULL, '2026-03-23 11:14:31', '2026-03-23 11:14:31', NULL),
+(28, 20, 11, 12, '40.50', 1, '40.50', NULL, '2026-03-23 11:14:31', '2026-03-23 11:14:31', NULL),
+(29, 20, 15, 28, '13.50', 1, '13.50', NULL, '2026-03-23 11:14:31', '2026-03-23 11:14:31', NULL);
 
 -- --------------------------------------------------------
 
@@ -1955,12 +2143,12 @@ INSERT INTO `vendor_order_items` (`id`, `vendor_order_id`, `product_id`, `varian
 --
 
 CREATE TABLE `vendor_ratings` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `rating` tinyint(3) UNSIGNED NOT NULL,
-  `comment` text DEFAULT NULL,
-  `is_visible` tinyint(1) NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `rating` tinyint UNSIGNED NOT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci,
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1979,13 +2167,13 @@ INSERT INTO `vendor_ratings` (`id`, `vendor_id`, `user_id`, `rating`, `comment`,
 --
 
 CREATE TABLE `vendor_reports` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `reason` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'pending',
-  `handled_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `reason` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `handled_by` bigint UNSIGNED DEFAULT NULL,
   `handled_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -2005,11 +2193,11 @@ INSERT INTO `vendor_reports` (`id`, `vendor_id`, `user_id`, `reason`, `descripti
 --
 
 CREATE TABLE `vendor_settings` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `value` text DEFAULT NULL,
-  `type` enum('string','number','boolean','json') NOT NULL DEFAULT 'string',
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci,
+  `type` enum('string','number','boolean','json') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'string',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2033,13 +2221,13 @@ INSERT INTO `vendor_settings` (`id`, `vendor_id`, `key`, `value`, `type`, `creat
 --
 
 CREATE TABLE `vendor_subscriptions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `plan_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `plan_id` bigint UNSIGNED NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `price` double NOT NULL,
-  `status` enum('active','inactive','expired') NOT NULL,
+  `status` enum('active','inactive','expired') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2060,12 +2248,12 @@ INSERT INTO `vendor_subscriptions` (`id`, `vendor_id`, `plan_id`, `start_date`, 
 --
 
 CREATE TABLE `vendor_time_slots` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `day_of_week` tinyint(3) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `day_of_week` tinyint UNSIGNED NOT NULL,
   `opens_at` time NOT NULL,
   `closes_at` time NOT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2081,7 +2269,9 @@ INSERT INTO `vendor_time_slots` (`id`, `vendor_id`, `day_of_week`, `opens_at`, `
 (4, 13, 3, '07:30:00', '22:00:00', 1, '2026-02-23 11:09:14', '2026-02-23 11:09:14'),
 (5, 13, 4, '10:00:00', '22:00:00', 1, '2026-02-23 11:09:36', '2026-02-23 11:09:36'),
 (6, 13, 5, '10:00:00', '23:00:00', 1, '2026-02-23 11:09:52', '2026-02-23 11:09:52'),
-(7, 13, 6, '10:00:00', '23:59:00', 1, '2026-02-23 11:10:11', '2026-02-23 11:10:11');
+(7, 13, 6, '10:00:00', '23:59:00', 1, '2026-02-23 11:10:11', '2026-02-23 11:10:11'),
+(8, 2, 0, '08:00:00', '10:00:00', 1, '2026-05-09 13:32:40', '2026-05-09 13:44:24'),
+(9, 2, 3, '09:12:00', '20:12:00', 1, '2026-05-09 14:12:45', '2026-05-09 14:12:45');
 
 -- --------------------------------------------------------
 
@@ -2090,15 +2280,15 @@ INSERT INTO `vendor_time_slots` (`id`, `vendor_id`, `day_of_week`, `opens_at`, `
 --
 
 CREATE TABLE `vendor_users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `user_type` enum('owner','branch') NOT NULL DEFAULT 'owner',
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `user_type` enum('owner','branch') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'owner',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  `branch_id` bigint(20) UNSIGNED DEFAULT NULL
+  `branch_id` bigint UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -2118,30 +2308,31 @@ INSERT INTO `vendor_users` (`id`, `vendor_id`, `user_id`, `is_active`, `user_typ
 --
 
 CREATE TABLE `vendor_withdrawals` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vendor_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `vendor_id` bigint UNSIGNED NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
-  `method` varchar(255) DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
-  `processed_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `status` enum('pending','approved','rejected') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `method` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `processed_by` bigint UNSIGNED DEFAULT NULL,
   `processed_at` timestamp NULL DEFAULT NULL,
   `balance_before` decimal(10,2) DEFAULT NULL,
   `balance_after` decimal(10,2) DEFAULT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`payload`)),
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `vendor_withdrawals`
 --
 
 INSERT INTO `vendor_withdrawals` (`id`, `vendor_id`, `amount`, `status`, `method`, `notes`, `processed_by`, `processed_at`, `balance_before`, `balance_after`, `payload`, `created_at`, `updated_at`) VALUES
-(1, 13, 6.00, 'approved', 'InstaPay', NULL, 1, '2026-01-21 10:49:24', 946.00, 940.00, NULL, '2026-01-21 10:48:08', '2026-01-21 10:49:24'),
-(2, 13, 100.00, 'rejected', 'Wallet', 'Test Request', 1, '2026-01-21 10:49:30', 946.00, 946.00, NULL, '2026-01-21 10:48:45', '2026-01-21 10:49:30'),
-(3, 13, 40.00, 'approved', 'Instapay', 'test note', 1, '2026-01-25 13:15:38', 940.00, 900.00, NULL, '2026-01-25 13:15:13', '2026-01-25 13:15:38'),
-(4, 13, 500.00, 'pending', 'تحويل بنكى', NULL, NULL, NULL, 900.00, 900.00, NULL, '2026-03-23 11:25:18', '2026-03-23 11:25:18');
+(1, 13, '6.00', 'approved', 'InstaPay', NULL, 1, '2026-01-21 10:49:24', '946.00', '940.00', NULL, '2026-01-21 10:48:08', '2026-01-21 10:49:24'),
+(2, 13, '100.00', 'rejected', 'Wallet', 'Test Request', 1, '2026-01-21 10:49:30', '946.00', '946.00', NULL, '2026-01-21 10:48:45', '2026-01-21 10:49:30'),
+(3, 13, '40.00', 'approved', 'Instapay', 'test note', 1, '2026-01-25 13:15:38', '940.00', '900.00', NULL, '2026-01-25 13:15:13', '2026-01-25 13:15:38'),
+(4, 13, '500.00', 'pending', 'تحويل بنكى', NULL, NULL, NULL, '900.00', '900.00', NULL, '2026-03-23 11:25:18', '2026-03-23 11:25:18'),
+(5, 2, '10.00', 'pending', 'cash', NULL, NULL, NULL, '111.00', '111.00', NULL, '2026-05-09 14:11:38', '2026-05-09 14:11:38');
 
 -- --------------------------------------------------------
 
@@ -2150,11 +2341,11 @@ INSERT INTO `vendor_withdrawals` (`id`, `vendor_id`, `amount`, `status`, `method
 --
 
 CREATE TABLE `verifications` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `target` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `target` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `expires_at` timestamp NOT NULL,
   `verified_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -2168,7 +2359,8 @@ CREATE TABLE `verifications` (
 INSERT INTO `verifications` (`id`, `user_id`, `type`, `target`, `code`, `expires_at`, `verified_at`, `created_at`, `updated_at`) VALUES
 (6, 15, 'email', 'khaled@vendor.com', '739701', '2026-01-14 10:16:38', '2026-01-14 10:06:50', '2026-01-14 10:06:38', '2026-01-14 10:06:50'),
 (7, 16, 'email', 'islam@vendor.com', '475013', '2026-01-15 08:17:55', '2026-01-15 08:08:18', '2026-01-15 08:07:55', '2026-01-15 08:08:18'),
-(9, 18, 'email', 'newemail@user.com', '980517', '2026-01-15 12:59:51', NULL, '2026-01-15 12:49:51', '2026-01-15 12:49:51');
+(9, 18, 'email', 'newemail@user.com', '980517', '2026-01-15 12:59:51', NULL, '2026-01-15 12:49:51', '2026-01-15 12:49:51'),
+(12, 25, 'email', 'el3amed22@gmail.com', '653676', '2026-04-23 11:17:07', NULL, '2026-04-23 11:07:07', '2026-04-23 11:07:07');
 
 -- --------------------------------------------------------
 
@@ -2177,12 +2369,12 @@ INSERT INTO `verifications` (`id`, `user_id`, `type`, `target`, `code`, `expires
 --
 
 CREATE TABLE `wallet_transactions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `type` enum('addition','subtraction') NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `type` enum('addition','subtraction') COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `balance_after` decimal(10,2) NOT NULL,
-  `notes` varchar(255) DEFAULT NULL,
+  `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2192,10 +2384,10 @@ CREATE TABLE `wallet_transactions` (
 --
 
 INSERT INTO `wallet_transactions` (`id`, `user_id`, `type`, `amount`, `balance_after`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 18, 'addition', 0.00, 0.00, 'Order #3', '2026-01-19 13:08:22', '2026-01-19 13:08:22'),
-(2, 18, 'addition', 0.00, 0.00, 'Order #4', '2026-01-19 13:16:43', '2026-01-19 13:16:43'),
-(3, 18, 'addition', 779.25, 779.25, 'Refund for Order #7', '2026-01-20 10:54:13', '2026-01-20 10:54:13'),
-(4, 24, 'addition', 2118.00, 2118.00, 'Refund for Order #10', '2026-03-23 13:37:16', '2026-03-23 13:37:16');
+(1, 18, 'addition', '0.00', '0.00', 'Order #3', '2026-01-19 13:08:22', '2026-01-19 13:08:22'),
+(2, 18, 'addition', '0.00', '0.00', 'Order #4', '2026-01-19 13:16:43', '2026-01-19 13:16:43'),
+(3, 18, 'addition', '779.25', '779.25', 'Refund for Order #7', '2026-01-20 10:54:13', '2026-01-20 10:54:13'),
+(4, 24, 'addition', '2118.00', '2118.00', 'Refund for Order #10', '2026-03-23 13:37:16', '2026-03-23 13:37:16');
 
 -- --------------------------------------------------------
 
@@ -2204,13 +2396,13 @@ INSERT INTO `wallet_transactions` (`id`, `user_id`, `type`, `amount`, `balance_a
 --
 
 CREATE TABLE `zones` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `polygon` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`polygon`)),
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `polygon` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `zones`
@@ -2462,6 +2654,38 @@ ALTER TABLE `order_refund_requests`
   ADD KEY `order_refund_requests_user_id_foreign` (`user_id`),
   ADD KEY `order_refund_requests_processed_by_foreign` (`processed_by`),
   ADD KEY `order_refund_requests_order_id_status_index` (`order_id`,`status`);
+
+--
+-- Indexes for table `package_shipments`
+--
+ALTER TABLE `package_shipments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `package_shipments_package_size_id_foreign` (`package_size_id`),
+  ADD KEY `package_shipments_sender_id_status_index` (`sender_id`,`status`),
+  ADD KEY `package_shipments_receiver_phone_status_index` (`receiver_phone`,`status`),
+  ADD KEY `package_shipments_status_payment_status_index` (`status`,`payment_status`);
+
+--
+-- Indexes for table `package_shipment_assignments`
+--
+ALTER TABLE `package_shipment_assignments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `package_shipment_assignments_delivery_id_status_index` (`delivery_id`,`status`),
+  ADD KEY `package_shipment_assignments_package_shipment_id_status_index` (`package_shipment_id`,`status`);
+
+--
+-- Indexes for table `package_shipment_logs`
+--
+ALTER TABLE `package_shipment_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `package_shipment_logs_user_id_foreign` (`user_id`),
+  ADD KEY `package_shipment_logs_package_shipment_id_type_index` (`package_shipment_id`,`type`);
+
+--
+-- Indexes for table `package_sizes`
+--
+ALTER TABLE `package_sizes`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `password_reset_tokens`
@@ -2780,349 +3004,373 @@ ALTER TABLE `zones`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `branches`
 --
 ALTER TABLE `branches`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `branch_product_stocks`
 --
 ALTER TABLE `branch_product_stocks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `branch_product_variant_stocks`
 --
 ALTER TABLE `branch_product_variant_stocks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `category_requests`
 --
 ALTER TABLE `category_requests`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `deliveries`
 --
 ALTER TABLE `deliveries`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `delivery_assignments`
 --
 ALTER TABLE `delivery_assignments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `delivery_assignment_pickups`
 --
 ALTER TABLE `delivery_assignment_pickups`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `delivery_requests`
 --
 ALTER TABLE `delivery_requests`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `delivery_shift`
 --
 ALTER TABLE `delivery_shift`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `delivery_wallet_transactions`
 --
 ALTER TABLE `delivery_wallet_transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `delivery_zone`
 --
 ALTER TABLE `delivery_zone`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `favorites`
 --
 ALTER TABLE `favorites`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `order_logs`
 --
 ALTER TABLE `order_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `order_refund_requests`
 --
 ALTER TABLE `order_refund_requests`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `package_shipments`
+--
+ALTER TABLE `package_shipments`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `package_shipment_assignments`
+--
+ALTER TABLE `package_shipment_assignments`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `package_shipment_logs`
+--
+ALTER TABLE `package_shipment_logs`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `package_sizes`
+--
+ALTER TABLE `package_sizes`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `password_reset_tokens`
 --
 ALTER TABLE `password_reset_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `plans`
 --
 ALTER TABLE `plans`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `point_transactions`
 --
 ALTER TABLE `point_transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `product_ratings`
 --
 ALTER TABLE `product_ratings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product_relations`
 --
 ALTER TABLE `product_relations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `product_reports`
 --
 ALTER TABLE `product_reports`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `product_variant_values`
 --
 ALTER TABLE `product_variant_values`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `shifts`
 --
 ALTER TABLE `shifts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sliders`
 --
 ALTER TABLE `sliders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ticket_messages`
 --
 ALTER TABLE `ticket_messages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `variants`
 --
 ALTER TABLE `variants`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `variant_options`
 --
 ALTER TABLE `variant_options`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `variant_requests`
 --
 ALTER TABLE `variant_requests`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `vendor_balance_transactions`
 --
 ALTER TABLE `vendor_balance_transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `vendor_orders`
 --
 ALTER TABLE `vendor_orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `vendor_order_items`
 --
 ALTER TABLE `vendor_order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `vendor_ratings`
 --
 ALTER TABLE `vendor_ratings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `vendor_reports`
 --
 ALTER TABLE `vendor_reports`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `vendor_settings`
 --
 ALTER TABLE `vendor_settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `vendor_subscriptions`
 --
 ALTER TABLE `vendor_subscriptions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `vendor_time_slots`
 --
 ALTER TABLE `vendor_time_slots`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `vendor_users`
 --
 ALTER TABLE `vendor_users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `vendor_withdrawals`
 --
 ALTER TABLE `vendor_withdrawals`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `verifications`
 --
 ALTER TABLE `verifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `wallet_transactions`
 --
 ALTER TABLE `wallet_transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `zones`
 --
 ALTER TABLE `zones`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -3271,6 +3519,27 @@ ALTER TABLE `order_refund_requests`
   ADD CONSTRAINT `order_refund_requests_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `order_refund_requests_processed_by_foreign` FOREIGN KEY (`processed_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `order_refund_requests_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `package_shipments`
+--
+ALTER TABLE `package_shipments`
+  ADD CONSTRAINT `package_shipments_package_size_id_foreign` FOREIGN KEY (`package_size_id`) REFERENCES `package_sizes` (`id`) ON DELETE RESTRICT,
+  ADD CONSTRAINT `package_shipments_sender_id_foreign` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `package_shipment_assignments`
+--
+ALTER TABLE `package_shipment_assignments`
+  ADD CONSTRAINT `package_shipment_assignments_delivery_id_foreign` FOREIGN KEY (`delivery_id`) REFERENCES `deliveries` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `package_shipment_assignments_package_shipment_id_foreign` FOREIGN KEY (`package_shipment_id`) REFERENCES `package_shipments` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `package_shipment_logs`
+--
+ALTER TABLE `package_shipment_logs`
+  ADD CONSTRAINT `package_shipment_logs_package_shipment_id_foreign` FOREIGN KEY (`package_shipment_id`) REFERENCES `package_shipments` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `package_shipment_logs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `point_transactions`
@@ -3454,4 +3723,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-deliveries
