@@ -20,6 +20,7 @@ class Vendor extends Model
         'phone',
         'address',
         'image',
+        'cover_image',
         'is_active',
         'is_featured',
         'balance',
@@ -43,6 +44,13 @@ class Vendor extends Model
             get: fn ($value) => $value
                 ? asset('storage/'.$value)
                 : asset('dashboard/images/vendor_image.jpg')
+        );
+    }
+
+    protected function coverImage(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? asset('storage/'.$value) : null
         );
     }
 

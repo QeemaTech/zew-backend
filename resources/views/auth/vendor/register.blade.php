@@ -175,6 +175,23 @@
                             style="max-width: 200px; max-height: 200px;">
                     </div>
                 </div>
+
+                <div class="mb-3">
+                    <label for="cover_image" class="form-label">{{ __('Vendor Cover Image') }}</label>
+                    <input type="file" class="form-control @error('cover_image') is-invalid @enderror"
+                        id="cover_image" name="cover_image" accept="image/*"
+                        onchange="previewCoverImage(this)">
+                    @error('cover_image')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <small
+                        class="text-muted">{{ __('Recommended size: 1200x400px. Max size: 3MB') }}</small>
+
+                    <div id="coverImagePreview" class="mt-3" style="display: none;">
+                        <img id="coverPreview" src="" alt="Cover Preview" class="img-thumbnail"
+                            style="max-width: 320px; max-height: 160px;">
+                    </div>
+                </div>
             </div>
 
             <!-- Wizard Actions -->
@@ -281,6 +298,24 @@
         function previewImage(input) {
             const preview = document.getElementById('preview');
             const previewDiv = document.getElementById('imagePreview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    previewDiv.style.display = 'block';
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                previewDiv.style.display = 'none';
+            }
+        }
+
+        function previewCoverImage(input) {
+            const preview = document.getElementById('coverPreview');
+            const previewDiv = document.getElementById('coverImagePreview');
 
             if (input.files && input.files[0]) {
                 const reader = new FileReader();

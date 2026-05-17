@@ -110,6 +110,9 @@ class VendorService
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('vendors', 'public');
             }
+            if ($request->hasFile('cover_image')) {
+                $data['cover_image'] = $request->file('cover_image')->store('vendors', 'public');
+            }
 
             // Generate slug from English name
             if (isset($request->name['en']) && ! empty($request->name['en'])) {
@@ -136,6 +139,9 @@ class VendorService
             // If an image was uploaded, delete it
             if (isset($data['image']) && Storage::disk('public')->exists($data['image'])) {
                 Storage::disk('public')->delete($data['image']);
+            }
+            if (isset($data['cover_image']) && Storage::disk('public')->exists($data['cover_image'])) {
+                Storage::disk('public')->delete($data['cover_image']);
             }
             throw $e;
         }
@@ -189,6 +195,9 @@ class VendorService
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('vendors', 'public');
             }
+            if ($request->hasFile('cover_image')) {
+                $data['cover_image'] = $request->file('cover_image')->store('vendors', 'public');
+            }
 
             // Generate slug from English name
             if (isset($request->name['en']) && ! empty($request->name['en'])) {
@@ -215,6 +224,9 @@ class VendorService
             // If an image was uploaded, delete it
             if (isset($data['image']) && Storage::disk('public')->exists($data['image'])) {
                 Storage::disk('public')->delete($data['image']);
+            }
+            if (isset($data['cover_image']) && Storage::disk('public')->exists($data['cover_image'])) {
+                Storage::disk('public')->delete($data['cover_image']);
             }
             throw $e;
         }
@@ -293,6 +305,13 @@ class VendorService
                 $data['image'] = null;
             }
 
+            if ($request->hasFile('cover_image')) {
+                if ($vendor->getRawOriginal('cover_image') && Storage::disk('public')->exists($vendor->getRawOriginal('cover_image'))) {
+                    Storage::disk('public')->delete($vendor->getRawOriginal('cover_image'));
+                }
+                $data['cover_image'] = $request->file('cover_image')->store('vendors', 'public');
+            }
+
             // Update slug if name changed
             if (isset($request->name['en']) && ! empty($request->name['en'])) {
                 $newSlug = \Illuminate\Support\Str::slug($request->name['en']);
@@ -324,6 +343,9 @@ class VendorService
             if (isset($data['image']) && $request->hasFile('image') && Storage::disk('public')->exists($data['image'])) {
                 Storage::disk('public')->delete($data['image']);
             }
+            if (isset($data['cover_image']) && $request->hasFile('cover_image') && Storage::disk('public')->exists($data['cover_image'])) {
+                Storage::disk('public')->delete($data['cover_image']);
+            }
             throw $e;
         }
     }
@@ -338,6 +360,9 @@ class VendorService
             // Delete image if exists
             if ($vendor->image && Storage::disk('public')->exists($vendor->getRawOriginal('image'))) {
                 Storage::disk('public')->delete($vendor->getRawOriginal('image'));
+            }
+            if ($vendor->cover_image && Storage::disk('public')->exists($vendor->getRawOriginal('cover_image'))) {
+                Storage::disk('public')->delete($vendor->getRawOriginal('cover_image'));
             }
 
             $deleted = $this->vendorRepository->delete($vendor);
@@ -361,6 +386,9 @@ class VendorService
             // Delete image if exists
             if ($vendor->image && Storage::disk('public')->exists($vendor->getRawOriginal('image'))) {
                 Storage::disk('public')->delete($vendor->getRawOriginal('image'));
+            }
+            if ($vendor->cover_image && Storage::disk('public')->exists($vendor->getRawOriginal('cover_image'))) {
+                Storage::disk('public')->delete($vendor->getRawOriginal('cover_image'));
             }
 
             $deleted = $this->vendorRepository->forceDelete($vendor);

@@ -29,6 +29,7 @@ class RegisterRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:20', 'unique:users,phone'],
             'address' => ['nullable', 'string', 'max:500'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:3072'],
+            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:3072'],
             'plan_id' => ['nullable', 'exists:plans,id'],
         ];
 
@@ -72,6 +73,9 @@ class RegisterRequest extends FormRequest
             'image.image' => 'The file must be an image.',
             'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, svg, webp.',
             'image.max' => 'The image must not be larger than 3MB.',
+            'cover_image.image' => 'The cover image must be an image.',
+            'cover_image.mimes' => 'The cover image must be a file of type: jpeg, png, jpg, gif, svg, webp.',
+            'cover_image.max' => 'The cover image must not be larger than 3MB.',
             'plan_id.exists' => 'The selected plan does not exist.',
         ];
     }
