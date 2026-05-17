@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -17,8 +18,20 @@ class ProfileController extends Controller
     public function edit(): View
     {
         $user = Auth::user();
+
+        $vendor = null;
+        $profileImage = $user->image;
+        if ($user && $user->hasRole('vendor')) {
+            $vendor = $user->vendor();
+            if ($vendor?->image) {
+                $profileImage = $vendor->image;
+            }
+        }
+
         return view('auth.profile', [
-            'user' => Auth::user(),
+            'user' => $user,
+            'vendor' => $vendor,
+            'profileImage' => $profileImage,
         ]);
     }
 
@@ -28,19 +41,34 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        // store image
+        $user = $request->user();
+
+        // Store image on vendor profile if user is vendor owner, otherwise on user profile.
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('users', 'public');
-
+            if ($user->hasRole('vendor') && $user->vendor()) {
+                $vendor = $user->vendor();
+                $oldVendorImagePath = $vendor->getRawOriginal('image');
+                if ($oldVendorImagePath && Storage::disk('public')->exists($oldVendorImagePath)) {
+                    Storage::disk('public')->delete($oldVendorImagePath);
+                }
+                $vendor->image = $request->file('image')->store('vendors', 'public');
+                $vendor->save();
+            } else {
+                $oldUserImagePath = $user->getRawOriginal('image');
+                if ($oldUserImagePath && Storage::disk('public')->exists($oldUserImagePath)) {
+                    Storage::disk('public')->delete($oldUserImagePath);
+                }
+                $data['image'] = $request->file('image')->store('users', 'public');
+            }
         }
 
-        $request->user()->fill($data);
+        $user->fill($data);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('profile')->with('status', 'profile-updated');
     }

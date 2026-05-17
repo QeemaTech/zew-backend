@@ -1,4 +1,14 @@
 <!-- Header -->
+@php
+    $headerUser = auth()->user();
+    $headerAvatar = asset('dashboard/assets/images/avatar-placeholder.svg');
+    if ($headerUser) {
+        $headerAvatar = $headerUser->image;
+        if ($headerUser->hasRole('vendor') && isset($currentVendor) && $currentVendor?->image) {
+            $headerAvatar = $currentVendor->image;
+        }
+    }
+@endphp
 <header class="admin-header">
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
         <div class="container-fluid">
@@ -140,7 +150,7 @@
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
 
-                        <img src="{{ auth()->user()->image }}"
+                        <img src="{{ $headerAvatar }}"
                              alt="User Avatar"
                              width="24"
                              height="24"

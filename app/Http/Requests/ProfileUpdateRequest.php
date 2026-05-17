@@ -29,6 +29,13 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'phone' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique(User::class)->ignore($this->user()->id),
+            ],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:5120'],
         ];
     }
 }

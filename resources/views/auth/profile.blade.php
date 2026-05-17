@@ -69,7 +69,7 @@
                                             <div class="text-center mb-4" id="imagePreview">
                                                 <img
                                                     id="preview"
-                                                    src="{{ $user->image }}"
+                                                    src="{{ $profileImage ?? $user->image }}"
                                                     class="rounded-circle shadow"
                                                     style="width:120px; height:120px; object-fit:cover;"
                                                     alt="Profile Image"

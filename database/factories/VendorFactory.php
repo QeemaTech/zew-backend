@@ -30,6 +30,7 @@ class VendorFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'address' => fake()->address(),
             'image' => null,
+            'cover_image' => null,
             'is_active' => true,
             'is_featured' => false,
             'balance' => fake()->randomFloat(2, 0, 10000),

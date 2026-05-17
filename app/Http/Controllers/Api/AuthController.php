@@ -118,9 +118,19 @@ class AuthController extends Controller
             'phone' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:3072'],
+            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:3072'],
         ]);
         DB::beginTransaction();
+        $imagePath = null;
+        $coverImagePath = null;
         try {
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('vendors', 'public');
+            }
+            if ($request->hasFile('cover_image')) {
+                $coverImagePath = $request->file('cover_image')->store('vendors', 'public');
+            }
+
             $user = User::create([
                 'name' => $request->owner_name,
                 'email' => $request->owner_email,
@@ -139,7 +149,8 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'phone' => $request->phone,
                 'address' => $request->address,
-                'image' => $request->image,
+                'image' => $imagePath,
+                'cover_image' => $coverImagePath,
                 'commission_percentage' => setting('commission_percentage'),
             ]);
             DB::commit();
@@ -156,6 +167,12 @@ class AuthController extends Controller
             ], 201);
         } catch (\Throwable $th) {
             DB::rollBack();
+            if ($imagePath && \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($imagePath);
+            }
+            if ($coverImagePath && \Illuminate\Support\Facades\Storage::disk('public')->exists($coverImagePath)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($coverImagePath);
+            }
             throw $th;
         }
     }
