@@ -223,6 +223,7 @@ Route::group(['middleware' => 'locale'], function () {
 
         // vendor (mobile dashboard) - isolated from user and delivery flows
         Route::prefix('vendor')->middleware('vendor.user')->group(function () {
+            Route::post('update/profile', [AuthController::class, 'updateVendorProfile'])->name('api.vendor.profile.update');
             Route::get('home', [VendorHomeController::class, 'index'])->name('api.vendor.home.index');
             Route::get('reports/summary', [ApiVendorReportController::class, 'summary'])->name('api.vendor.reports.summary');
             Route::get('variants', [ApiVendorVariantController::class, 'index'])->name('api.vendor.variants.index');

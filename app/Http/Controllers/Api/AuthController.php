@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -173,6 +174,132 @@ class AuthController extends Controller
             if ($coverImagePath && \Illuminate\Support\Facades\Storage::disk('public')->exists($coverImagePath)) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($coverImagePath);
             }
+            throw $th;
+        }
+    }
+
+    public function updateVendorProfile(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $vendor = $user?->vendor();
+
+        if (! $vendor) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Vendor not found.'),
+            ], 404);
+        }
+
+        if (! $user->hasRole('admin') && (int) $vendor->owner_id !== (int) $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Only vendor owner can update vendor profile.'),
+            ], 403);
+        }
+
+        $owner = $vendor->owner;
+        if (! $owner) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Vendor owner not found.'),
+            ], 404);
+        }
+
+        $request->validate([
+            'owner_name' => ['required', 'string', 'max:255'],
+            'owner_email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,'.$owner->id],
+            'owner_password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'owner_phone' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'array'],
+            'name.*' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:3072'],
+            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:3072'],
+        ]);
+
+        DB::beginTransaction();
+        $newImagePath = null;
+        $newCoverImagePath = null;
+        $oldImagePath = $vendor->getRawOriginal('image');
+        $oldCoverImagePath = $vendor->getRawOriginal('cover_image');
+
+        try {
+            if ($request->hasFile('image')) {
+                $newImagePath = $request->file('image')->store('vendors', 'public');
+            }
+            if ($request->hasFile('cover_image')) {
+                $newCoverImagePath = $request->file('cover_image')->store('vendors', 'public');
+            }
+
+            $ownerData = [
+                'name' => $request->owner_name,
+                'email' => $request->owner_email,
+                'phone' => $request->owner_phone,
+            ];
+            if ($request->filled('owner_password')) {
+                $ownerData['password'] = Hash::make($request->owner_password);
+            }
+            $owner->update($ownerData);
+
+            $slug = $vendor->slug;
+            if (! empty($request->name['en'])) {
+                $baseSlug = Str::slug($request->name['en']);
+                $slug = $baseSlug;
+                $counter = 1;
+
+                while (Vendor::where('slug', $slug)->where('id', '!=', $vendor->id)->exists()) {
+                    $slug = $baseSlug.'-'.$counter;
+                    $counter++;
+                }
+            }
+
+            $vendorData = [
+                'slug' => $slug,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'address' => $request->address,
+            ];
+
+            if ($newImagePath) {
+                $vendorData['image'] = $newImagePath;
+            }
+            if ($newCoverImagePath) {
+                $vendorData['cover_image'] = $newCoverImagePath;
+            }
+
+            $vendor->update($vendorData);
+
+            if ($newImagePath && $oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+            if ($newCoverImagePath && $oldCoverImagePath && Storage::disk('public')->exists($oldCoverImagePath)) {
+                Storage::disk('public')->delete($oldCoverImagePath);
+            }
+
+            DB::commit();
+
+            $vendor->refresh();
+            $owner->refresh();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('Vendor profile updated successfully.'),
+                'data' => [
+                    'owner' => new UserResource($owner),
+                    'vendor' => $vendor,
+                ],
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            if ($newImagePath && Storage::disk('public')->exists($newImagePath)) {
+                Storage::disk('public')->delete($newImagePath);
+            }
+            if ($newCoverImagePath && Storage::disk('public')->exists($newCoverImagePath)) {
+                Storage::disk('public')->delete($newCoverImagePath);
+            }
+
             throw $th;
         }
     }
