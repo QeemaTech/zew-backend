@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\VendorResource;
 use App\Models\Category;
+use App\Models\Vendor;
 use App\Services\CategoryService;
 
 class CategoryController extends Controller
@@ -36,5 +38,25 @@ class CategoryController extends Controller
         $category = $this->service->getCategoryById($category->id);
 
         return new CategoryResource($category);
+    }
+
+    public function vendors(Category $category)
+    {
+        $perPage = (int) request()->get('per_page', 15);
+
+        $vendors = Vendor::query()
+            ->active()
+            ->whereHas('products.categories', function ($query) use ($category) {
+                $query->where('categories.id', $category->id);
+            })
+            ->withAvg(['ratings as rating_average' => function ($query) {
+                $query->where('is_visible', true);
+            }], 'rating')
+            ->withCount(['ratings as rating_count' => function ($query) {
+                $query->where('is_visible', true);
+            }])
+            ->paginate($perPage);
+
+        return VendorResource::collection($vendors);
     }
 }

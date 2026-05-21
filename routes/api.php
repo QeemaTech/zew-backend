@@ -255,6 +255,7 @@ Route::group(['middleware' => 'locale'], function () {
     });
 
     // Category routes
+    Route::get('/categories/{category}/vendors', [CategoryController::class, 'vendors'])->name('api.categories.vendors');
     Route::apiResource('/categories', CategoryController::class)->only(['index', 'show']);
 
     // Vendor routes
