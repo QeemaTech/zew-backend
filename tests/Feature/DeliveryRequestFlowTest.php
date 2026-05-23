@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\Delivery;
 use App\Models\DeliveryRequest;
 use App\Models\User;
+use App\Notifications\DeliveryRequestReviewedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -157,6 +159,8 @@ class DeliveryRequestFlowTest extends TestCase
 
     public function test_admin_can_approve_delivery_request(): void
     {
+        Notification::fake();
+
         $request = DeliveryRequest::factory()->forUser($this->customer)->pending()->create([
             'vehicle_type' => 'car',
             'vehicle_number' => 'XYZ-999',
@@ -176,10 +180,20 @@ class DeliveryRequestFlowTest extends TestCase
             'vehicle_number' => 'XYZ-999',
             'vehicle_color' => 'Blue',
         ]);
+
+        Notification::assertSentTo(
+            $this->customer,
+            DeliveryRequestReviewedNotification::class,
+            function (DeliveryRequestReviewedNotification $notification): bool {
+                return $notification->deliveryRequest->status === 'accepted';
+            }
+        );
     }
 
     public function test_admin_can_reject_delivery_request(): void
     {
+        Notification::fake();
+
         $request = DeliveryRequest::factory()->forUser($this->customer)->pending()->create();
 
         $this->actingAs($this->admin)
@@ -193,5 +207,13 @@ class DeliveryRequestFlowTest extends TestCase
         $this->assertSame('rejected', $request->status);
         $this->assertSame('Not enough capacity.', $request->rejection_reason);
         $this->assertDatabaseMissing('deliveries', ['user_id' => $this->customer->id]);
+
+        Notification::assertSentTo(
+            $this->customer,
+            DeliveryRequestReviewedNotification::class,
+            function (DeliveryRequestReviewedNotification $notification): bool {
+                return $notification->deliveryRequest->status === 'rejected';
+            }
+        );
     }
 }

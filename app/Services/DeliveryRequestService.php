@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Delivery;
 use App\Models\DeliveryRequest;
 use App\Models\User;
+use App\Notifications\DeliveryRequestReviewedNotification;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,10 @@ use Illuminate\Support\Str;
 
 class DeliveryRequestService
 {
+    public function __construct(
+        protected NotificationService $notificationService
+    ) {}
+
     public function listForAdmin(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
         $query = DeliveryRequest::query()
@@ -68,6 +73,11 @@ class DeliveryRequestService
                 'rejection_reason' => null,
             ]);
 
+            $this->notificationService->notifyUser(
+                $deliveryRequest->user()->first(),
+                new DeliveryRequestReviewedNotification($deliveryRequest->fresh())
+            );
+
             return $delivery;
         });
     }
@@ -84,5 +94,10 @@ class DeliveryRequestService
             'reviewed_at' => now(),
             'rejection_reason' => $reason,
         ]);
+
+        $this->notificationService->notifyUser(
+            $deliveryRequest->user()->first(),
+            new DeliveryRequestReviewedNotification($deliveryRequest->fresh())
+        );
     }
 }
