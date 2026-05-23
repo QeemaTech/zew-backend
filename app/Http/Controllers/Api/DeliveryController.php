@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Delivery\ProfileUpdateRequest;
 use App\Http\Resources\DeliveryAssignmentResource;
+use App\Http\Resources\DeliveryProfileResource;
 use App\Http\Resources\DeliveryWalletTransactionResource;
 use App\Http\Resources\OrderResource;
 use App\Models\DeliveryAssignment;
@@ -12,6 +14,7 @@ use App\Services\DeliveryAssignmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class DeliveryController extends Controller
 {
@@ -49,6 +52,55 @@ class DeliveryController extends Controller
                 'last_page' => $transactions->lastPage(),
                 'per_page' => $transactions->perPage(),
                 'total' => $transactions->total(),
+            ],
+        ]);
+    }
+
+    /**
+     * Get the authenticated delivery profile without affecting normal user profile endpoint.
+     */
+    public function profile(): JsonResponse
+    {
+        $delivery = $this->delivery()->load('user')->loadCount(['zones', 'shifts']);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'delivery' => new DeliveryProfileResource($delivery),
+            ],
+        ]);
+    }
+
+    /**
+     * Update authenticated delivery profile (name and image only).
+     */
+    public function updateProfile(ProfileUpdateRequest $request): JsonResponse
+    {
+        $delivery = $this->delivery()->load('user');
+        $user = $delivery->user;
+
+        $data = $request->validated();
+
+        if (array_key_exists('name', $data)) {
+            $user->name = $data['name'];
+        }
+
+        if ($request->hasFile('image')) {
+            $currentImagePath = $user->getRawOriginal('image');
+            if ($currentImagePath && Storage::disk('public')->exists($currentImagePath)) {
+                Storage::disk('public')->delete($currentImagePath);
+            }
+            $user->image = $request->file('image')->store('users', 'public');
+        }
+
+        $user->save();
+        $delivery->load('user')->loadCount(['zones', 'shifts']);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Delivery profile updated successfully.'),
+            'data' => [
+                'delivery' => new DeliveryProfileResource($delivery),
             ],
         ]);
     }

@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Vendor\VendorTimeSlotController as ApiVendorTimeSlo
 use App\Http\Controllers\Api\Vendor\VariantController as ApiVendorVariantController;
 use App\Http\Controllers\Api\Vendor\WalletController as ApiVendorWalletController;
 use App\Http\Controllers\Api\DeliveryController;
+use App\Http\Controllers\Api\Delivery\ReportController as ApiDeliveryReportController;
 use App\Http\Controllers\Api\DeliveryPackageShipmentController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderRefundController;
@@ -186,6 +187,9 @@ Route::group(['middleware' => 'locale'], function () {
 
         // delivery (driver) – requires delivery.user middleware
         Route::prefix('delivery')->middleware('delivery.user')->group(function () {
+            Route::get('profile', [DeliveryController::class, 'profile'])->name('api.delivery.profile');
+            Route::put('profile', [DeliveryController::class, 'updateProfile'])->name('api.delivery.profile.update');
+            Route::get('reports/summary', [ApiDeliveryReportController::class, 'summary'])->name('api.delivery.reports.summary');
             Route::get('wallet/history', [DeliveryController::class, 'walletHistory'])->name('api.delivery.wallet.history');
             Route::get('orders', [DeliveryController::class, 'orders'])->name('api.delivery.orders-ready');
             Route::get('orders/{order}', [DeliveryController::class, 'showOrder'])->name('api.delivery.orders-ready.show');
@@ -272,3 +276,5 @@ Route::group(['middleware' => 'locale'], function () {
     // Slider routes
     Route::apiResource('/sliders', SliderController::class)->only(['index']);
 });
+
+
