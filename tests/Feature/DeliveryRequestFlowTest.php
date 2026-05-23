@@ -58,6 +58,75 @@ class DeliveryRequestFlowTest extends TestCase
         ]);
     }
 
+    public function test_authenticated_api_user_can_submit_delivery_request(): void
+    {
+        $token = $this->customer->createToken('test-token')->plainTextToken;
+
+        $this->withToken($token)
+            ->postJson('/api/become-delivery', [
+                'name' => $this->customer->name,
+                'phone' => '201234567890',
+                'vehicle_type' => 'motorcycle',
+                'vehicle_number' => 'API-1234',
+                'vehicle_color' => 'Black',
+                'message' => 'Mobile request',
+            ])
+            ->assertCreated()
+            ->assertJson([
+                'success' => true,
+            ]);
+
+        $this->assertDatabaseHas('delivery_requests', [
+            'user_id' => $this->customer->id,
+            'phone' => '201234567890',
+            'vehicle_number' => 'API-1234',
+            'status' => 'pending',
+        ]);
+    }
+
+    public function test_authenticated_api_user_with_pending_request_gets_conflict(): void
+    {
+        DeliveryRequest::factory()->forUser($this->customer)->pending()->create([
+            'phone' => '201234567890',
+        ]);
+        $token = $this->customer->createToken('test-token')->plainTextToken;
+
+        $this->withToken($token)
+            ->postJson('/api/become-delivery', [
+                'name' => $this->customer->name,
+                'phone' => '201111111111',
+                'vehicle_type' => 'motorcycle',
+                'vehicle_number' => 'API-9999',
+                'vehicle_color' => 'Black',
+            ])
+            ->assertStatus(409)
+            ->assertJson([
+                'success' => false,
+            ]);
+    }
+
+    public function test_unauthenticated_api_user_can_submit_delivery_request_with_null_user_id(): void
+    {
+        $this->postJson('/api/become-delivery', [
+            'name' => 'Guest User',
+            'phone' => '201000000000',
+            'vehicle_type' => 'car',
+            'vehicle_number' => 'GUEST-123',
+            'vehicle_color' => 'White',
+        ])
+            ->assertCreated()
+            ->assertJson([
+                'success' => true,
+            ]);
+
+        $this->assertDatabaseHas('delivery_requests', [
+            'user_id' => null,
+            'phone' => '201000000000',
+            'vehicle_number' => 'GUEST-123',
+            'status' => 'pending',
+        ]);
+    }
+
     public function test_user_with_pending_request_is_redirected_from_form(): void
     {
         DeliveryRequest::factory()->forUser($this->customer)->pending()->create();

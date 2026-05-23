@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\BecomeDeliveryController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
@@ -66,6 +67,10 @@ Route::post('/auth/reset-password/verify-code', [ResetPasswordController::class,
 Route::post('/auth/reset-password/set-new-password', [ResetPasswordController::class, 'resetPasswordSetNewPassword'])
     ->middleware('throttle:5,1')
     ->name('api.reset-password.set-new-password');
+// become delivery request (mobile)
+Route::post('become-delivery', [BecomeDeliveryController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('api.become-delivery.store');
 
 // User
 Route::group(['middleware' => 'locale'], function () {

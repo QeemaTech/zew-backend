@@ -32,6 +32,11 @@ class BecomeDeliveryController extends Controller
         $phone = $request->validated('phone');
         $userId = auth()->id();
 
+        if ($userId && Delivery::where('user_id', $userId)->exists()) {
+            return redirect()->route('become-delivery.create')
+                ->with('info', __('You are already registered as a delivery person.'));
+        }
+
         if ($userId && DeliveryRequest::where('user_id', $userId)->pending()->exists()) {
             return redirect()->route('become-delivery.create')
                 ->with('info', __('You already have a pending request.'));
